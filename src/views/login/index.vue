@@ -11,7 +11,7 @@
       <div class="right">
         <div class="my-width flex-sub flex justify-center align-center">
           <div class="logo-wrapper">
-            <img :src="require('@/assets/work_logo.png')" />
+            <!-- <img :src="require('@/assets/work_logo.png')" /> -->
           </div>
           <div class="title margin-left">Vue Admin Work</div>
         </div>
@@ -61,21 +61,17 @@
         </div>
       </div>
     </div>
-    <div class="login-footer-wrapper">
-      <PageFooter />
-    </div>
   </div>
 </template>
 
 <script>
 import ImageBg1 from '@/assets/img_login_bg_01.jpg'
 import ImageMobileBg1 from '@/assets/img_login_mobile_bg_01.jpg'
-import PageFooter from '@/layouts/footer'
 import VawVerify from 'vaw-verify'
 import 'vaw-verify/lib/vaw-verify.css'
 export default {
   name: 'Login',
-  components: { PageFooter, VawVerify },
+  components: { VawVerify },
   data() {
     return {
       username: 'admin',
@@ -171,7 +167,7 @@ export default {
       width: 50px;
     }
     & img::after {
-      content: "欢迎来到vue-admin-work";
+      content: "欢迎来到memorizingwords";
     }
   }
   .login-footer-wrapper {

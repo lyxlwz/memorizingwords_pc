@@ -5,14 +5,14 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/vue-admin-work' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/memorizingwords_pc' : '/',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: true,
   productionSourceMap: false,
   devServer: {
     hot: true,
-    port: 6666,
+    port: 5566,
     open: true
   },
   chainWebpack(config) {

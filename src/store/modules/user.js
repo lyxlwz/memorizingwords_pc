@@ -15,7 +15,8 @@ const state = {
 
 const getters = {
   getAvatar(state) {
-    return state.avatar || require('@/assets/img_avatar_example.gif')
+    return state.avatar
+    // return state.avatar || require('@/assets/img_avatar_example.gif')
   },
   getUserName(state) {
     return state.userName

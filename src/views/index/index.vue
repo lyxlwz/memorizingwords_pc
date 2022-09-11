@@ -1,190 +1,91 @@
 <template>
   <div class="main-container">
-    <el-row :gutter="5">
+    <div class="flex justify-end margin-tb-sm">
+      <el-input
+        v-model="serchVal"
+        placeholder="搜索"
+        suffix-icon="el-icon-search"
+        style="width:40%"
+      />
+    </div>
+    <el-row :gutter="20">
       <el-col
-        v-for="(item, index) of dataList"
+        v-for="(item,index) in dataList"
         :key="index"
-        :xs="24"
-        :sm="12"
-        :md="6"
-        class="item-wrapper"
+        :span="6"
       >
-        <DataItem :data-model="item">
-          <template
-            v-if="index === 0"
-            #extra="{ extra }"
-          >
-            <div class="margin-top">
-              <div class="text-gray">
-                较昨日新增：{{ extra.data }}
-                <i class="el-icon-caret-top text-green"></i>
-              </div>
-              <div class="text-gray margin-top-sm">
-                较上周新增：{{ extra.data1 }}
-                <i class="el-icon-caret-top text-blue"></i>
-              </div>
-            </div>
-          </template>
-          <template
-            v-else-if="index === 1"
-            #extra="{ extra }"
-          >
-            <div
-              class="margin-top"
-              style="position: relative"
-            >
-              <div class="text-gray">
-                较昨日新增：{{ extra.data }}
-                <i class="el-icon-caret-top text-green"></i>
-              </div>
-              <div class="text-gray margin-top-sm">
-                较上周新增：{{ extra.data1 }}
-                <i class="el-icon-caret-top text-blue"></i>
-              </div>
-              <div class="stack-avatar-wrapper">
-                <StackAvatar />
-              </div>
-            </div>
-          </template>
-          <template
-            v-else-if="index === 2"
-            #extra="{ extra }"
-          >
-            <el-progress
-              :text-inside="true"
-              :stroke-width="15"
-              :percentage="extra.data"
-              status="exception"
-            />
-          </template>
-          <template
-            v-else-if="index === 3"
-            #extra
-          >
-            <OrderChart ref="mOrderChart" />
-          </template>
-        </DataItem>
-      </el-col>
-    </el-row>
-    <el-row
-      :gutter="5"
-      class="margin-top-xs"
-    >
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="6"
-      >
-        <div class="flex flex-direction">
-          <SalesChart ref="salesChart" />
-          <StudentChart
-            ref="studentChart"
-            class="margin-top-xs"
-          />
+        <div
+          class="text-white text-df border-radius flex justify-center flex-direction padding-lg card-item"
+          :style="{'background-color':item.backgroundColor}"
+        >
+          <div>
+            {{ item.title }}
+          </div>
+          <div class="text-xxl">
+            {{ item.number }}
+          </div>
         </div>
       </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="12"
-        class="map-margin-tb"
+    </el-row>
+
+    <div
+      style="height: calc(100vh - 280px);"
+      class="flex align-center justify-center"
+    >
+      <div
+        class="border-radius padding-xl text-xxl margin-top flex justify-between"
+        style="background-color:red;width:60%;height:40%;"
       >
+        <div style="max-width:400px;">
+          <div class="text-bold">箴言</div>
+          <div class="margin-top-sm text-xl">
+            人的一生中应该有三个爱好，一个帮助你赚钱，一个管理身材，一个帮助你探索世界
+          </div>
+        </div>
         <div>
-          <SchoolChart ref="schoolChart" />
-        </div>
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="6"
-      >
-        <div class="flex flex-direction">
-          <EnrollmentChannelsChart ref="enrollmentChannelsChart" />
-          <DepartmentChart
-            ref="departmentChart"
-            class="margin-top-xs"
+          <img
+            :src="require('@/assets/img_avatar_default.png')"
+            alt=""
           />
         </div>
-      </el-col>
-    </el-row>
-    <el-row
-      :gutter="5"
-      class="margin-top-xs"
-    >
-      <el-col :span="24">
-        <FullYearSalesChart ref="fullYearSalesChart" />
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import DataItem from './components/DataItem'
-import OrderChart from './components/chart/OrderChart'
-import SalesChart from './components/chart/SalesChart'
-import StudentChart from './components/chart/StudentChart'
-import EnrollmentChannelsChart from './components/chart/EnrollmentChannelsChart'
-import DepartmentChart from './components/chart/DepartmentChart'
-import SchoolChart from './components/chart/SchoolChart'
-import FullYearSalesChart from './components/chart/FullYearSalesChart'
-import StackAvatar from '@/components/common/StackAvatar'
 import ResizeMixin from '@/mixins/ResizeMixin'
 export default {
   name: 'Main',
   components: {
-    DataItem,
-    OrderChart,
-    SchoolChart,
-    SalesChart,
-    StudentChart,
-    EnrollmentChannelsChart,
-    DepartmentChart,
-    FullYearSalesChart,
-    StackAvatar
+
   },
   mixins: [ResizeMixin],
   data() {
     return {
       dataList: [
         {
-          title: '今日访问量',
-          data: '+1000',
-          bottomTitle: '总访问量',
-          totalSum: '100万+',
-          extra: {
-            data: 1000,
-            data1: 2350
-          }
+          backgroundColor: 'pink',
+          title: '今日待学单词',
+          number: '201'
         },
         {
-          title: '新增用户',
-          data: '+500',
-          bottomTitle: '总用户量',
-          totalSum: '200万+',
-          extra: {
-            data: 700,
-            data1: 968
-          }
+          backgroundColor: 'blue',
+          title: '累积学习单词',
+          number: '9000'
         },
         {
-          title: '当月销售额',
-          data: '￥50000',
-          bottomTitle: '累计销售额',
-          totalSum: '2000万+',
-          extra: {
-            data: 80
-          }
+          backgroundColor: 'purple',
+          title: '目标学习单词',
+          number: '20000'
         },
         {
-          title: '当月订单量',
-          data: '189笔',
-          bottomTitle: '累计订单量',
-          totalSum: '1万+',
-          extra: {
-            data: 80
-          }
+          backgroundColor: 'green',
+          title: '剩余未学单词',
+          number: '11000'
         }
-      ]
+      ],
+      serchVal: ''
     }
   },
   computed: {
@@ -201,13 +102,7 @@ export default {
   },
   methods: {
     onResize(width) {
-      this.$refs.mOrderChart[0].updateChart()
-      this.$refs.salesChart.updateChart()
-      this.$refs.departmentChart.updateChart()
-      this.$refs.enrollmentChannelsChart.updateChart()
-      this.$refs.schoolChart.updateChart()
-      this.$refs.studentChart.updateChart()
-      this.$refs.fullYearSalesChart.updateChart()
+
     }
   }
 }
@@ -215,19 +110,9 @@ export default {
 
 <style lang="scss" scoped>
 @media screen and (max-width: 992px) {
-  .item-wrapper {
-    margin-bottom: 5px;
-  }
-  .map-margin-tb {
-    margin: 5px 0;
-  }
 }
-.chart-item {
-  background-color: #fff;
-}
-.stack-avatar-wrapper {
-  position: absolute;
-  right: -2%;
-  top: 10%;
+
+.card-item {
+  height: 140px;
 }
 </style>

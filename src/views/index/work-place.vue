@@ -91,16 +91,6 @@
               </span>
             </div>
           </template>
-          <el-row
-            v-for="(item, index) of trendsItems"
-            :key="index"
-          >
-            <TrendsItem :item="item">
-              <template #title="{title}">
-                <div v-html="title"></div>
-              </template>
-            </TrendsItem>
-          </el-row>
         </el-card>
       </div>
       <div style="flex: 2; margin-left: 5px">
@@ -172,15 +162,6 @@
             </span>
           </div>
         </template>
-        <el-row>
-          <el-col
-            v-for="(item, index) of dataItems"
-            :key="index"
-            :span="8"
-          >
-            <ProjectItem :item="item" />
-          </el-col>
-        </el-row>
       </el-card>
       <el-card
         :body-style="{padding: '5px'}"
@@ -195,16 +176,6 @@
             </span>
           </div>
         </template>
-        <el-row
-          v-for="(item, index) of trendsItems"
-          :key="index"
-        >
-          <TrendsItem :item="item">
-            <template #title="{title}">
-              <div v-html="title"></div>
-            </template>
-          </TrendsItem>
-        </el-row>
       </el-card>
       <el-card
         shadow="never"
@@ -244,11 +215,6 @@
             </span>
           </div>
         </template>
-        <TodoItem
-          v-for="(item, index) of tempWaitingItems"
-          :key="index"
-          :item="item"
-        />
         <div
           v-if="isShowMore"
           class="text-center"
@@ -267,85 +233,18 @@
 </template>
 
 <script>
-import ProjectItem from './components/ProjectItem'
-import TrendsItem from './components/TrendsItem'
-import TodoItem from './components/TodoItem'
-import HTML5_PATH from '@/assets/img_html5.jpeg'
-import CSS_PATH from '@/assets/img_css.jpeg'
-import JAVASCRIPT_PATH from '@/assets/img_javascript.jpeg'
-import REACT_PATH from '@/assets/img_react.jpeg'
-import VUE_PATH from '@/assets/img_vue.jpeg'
-import ANGULAR_PATH from '@/assets/img_angular.jpeg'
-import AVATAR_01 from '@/assets/img_avatar_01.jpeg'
-import AVATAR_02 from '@/assets/img_avatar_02.jpeg'
-import AVATAR_DEFAULT from '@/assets/img_avatar_default.png'
 import { mapGetters } from 'vuex'
 const COLORS = ['#67C23A', '#E6A23C', '#F56C6C', '#409EFF']
 const date = new Date()
 export default {
   name: 'WorkPlace',
   components: {
-    ProjectItem,
-    TrendsItem,
-    TodoItem
+
   },
   data() {
     return {
       currentDate:
         date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate(),
-      dataItems: [
-        {
-          title: 'HTML5',
-          imagePath: HTML5_PATH
-        },
-        {
-          title: 'CSS3',
-          imagePath: CSS_PATH
-        },
-        {
-          title: 'JavaScript',
-          imagePath: JAVASCRIPT_PATH
-        },
-        {
-          title: 'React',
-          imagePath: REACT_PATH
-        },
-        {
-          title: 'Vue',
-          imagePath: VUE_PATH
-        },
-        {
-          title: 'Angular',
-          imagePath: ANGULAR_PATH
-        }
-      ],
-      trendsItems: [
-        {
-          avatar: AVATAR_01,
-          title:
-            '<span><span class="margin-right text-blue">孙悟空</span>发表了一条动态<span class="margin-left text-blue">《看我七十二变》</span></span>'
-        },
-        {
-          avatar: AVATAR_02,
-          title:
-            '<span><span class="margin-right text-blue">唐僧</span>赞了<span class="margin-left-sm text-blue">八戒</span><span class="margin-left text-blue">~今天晚上的猪头肉真香~</span></span>'
-        },
-        {
-          avatar: AVATAR_01,
-          title:
-            '<span><span class="margin-right text-blue">孙悟空</span>发表了一条动态<span class="margin-left text-blue">《看我七十二变》</span></span>'
-        },
-        {
-          avatar: AVATAR_02,
-          title:
-            '<span><span class="margin-right text-blue">唐僧</span>赞了<span class="margin-left-sm text-blue">八戒</span><span class="margin-left text-blue">~今天晚上的猪头肉真香~</span></span>'
-        },
-        {
-          avatar: AVATAR_DEFAULT,
-          title:
-            '<span><span class="margin-right text-blue">我</span>提交了请假申请'
-        }
-      ],
       waitingItmes: [
         {
           content: '早上，中午，晚上上下班别忘记打卡',
@@ -458,7 +357,7 @@ export default {
   top: 20%;
   right: 0;
   height: 60%;
-  content: '';
+  content: "";
   display: block;
   width: 1px;
   background-color: #e0e0e0;

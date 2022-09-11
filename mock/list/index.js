@@ -105,7 +105,6 @@ Mock.mock(RegExp(getTableList), function ({ body }) {
         'nickName': function () {
           return Random.name()
         },
-        'avatar': '@/assets/img_avatar_01.jpeg',
         'gender|0-1': 0, // 0男 1女
         'vip|0-1': 0, // 0不是 1是
         'address': function () {
@@ -132,7 +131,7 @@ Mock.mock(RegExp(getCardList), function ({ body }) {
         'id': function () {
           return Random.string(10)
         },
-        'image': Random.image('300x600', '#50B347', '#FFF', 'vue-admin-work'),
+        'image': Random.image('300x600', '#50B347', '#FFF', 'memorizingwords_pc'),
         'description': function () {
           return Random.csentence(50, 200)
         },
@@ -153,7 +152,7 @@ Mock.mock(RegExp(getCommentList), function ({ body }) {
         'id': function () {
           return Random.string(10)
         },
-        'avatar': Random.image('100x100', '#50B347', '#FFF', 'vue-admin-work'),
+        'avatar': Random.image('100x100', '#50B347', '#FFF', 'memorizingwords_pc'),
         'nickName': function () {
           return Random.cname()
         },
@@ -163,7 +162,7 @@ Mock.mock(RegExp(getCommentList), function ({ body }) {
         'rate|1-5': 5,
         'images|0-1': [
           Random.image('300x600', '#50B347', '#FFF', 'vue'),
-          Random.image('300x600', '#409EFF', '#FFF', 'vue-admin-work'),
+          Random.image('300x600', '#409EFF', '#FFF', 'memorizingwords_pc'),
           Random.image('300x600', '#F56C6C', '#FFF', '前端')
         ],
         'status|0-1': 1 // 对外展示状态 0 不展示，1 展示

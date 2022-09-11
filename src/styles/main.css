@@ -1301,3 +1301,7 @@ body .el-table__fixed::before {
 .dashed-left::after {
   border-left: 1px dashed #ddd;
 }
+
+.border-radius{
+  border-radius:10px
+}

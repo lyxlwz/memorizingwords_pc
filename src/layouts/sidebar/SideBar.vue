@@ -1,12 +1,13 @@
 <template>
   <div
-    class="vaw-side-bar-wrapper"
+    class="vaw-side-bar-wrapper padding-lr-lg"
     :class="[!state.isCollapse ? 'open-status' : 'close-status']"
+    style="border-right: 1px solid rgba(0, 0, 0, 0.1);padding-top: 100px;"
   >
-    <transition name="logo">
+    <!-- <transition name="logo">
       <Logo v-if="showLogo" />
-    </transition>
-    <ScrollerMenu>
+    </transition> -->
+    <ScrollerMenu class="">
       <template v-for="item of routes">
         <SideBarItem
           :key="item.path"
@@ -46,7 +47,7 @@ export default {
 @import "../../assets/styles/variables.scss";
 .open-status {
   width: $menuWidth;
-  box-shadow: 2px 5px 5px rgb(202, 202, 202, 0.8);
+  // box-shadow: 2px 5px 5px rgb(202, 202, 202, 0.8);
   transition: all $transitionTime;
 }
 .close-status {

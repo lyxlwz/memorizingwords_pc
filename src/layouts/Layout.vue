@@ -28,11 +28,6 @@
       :class="[state.isCollapse ? 'close-shadow' : 'show-shadow']"
       @click="closeMenu"
     ></div>
-    <SettingInfo ref="settingInfo" />
-    <Setting
-      @open-drawer="openSettingDrawer"
-      @open-source="openSource"
-    />
   </div>
 </template>
 
@@ -70,9 +65,6 @@ export default {
     window.removeEventListener('resize', this.handleScreenResize)
   },
   methods: {
-    openSettingDrawer() {
-      this.$refs.settingInfo.show()
-    },
     openSource() {
       this.$refs.myNotice.show()
     },

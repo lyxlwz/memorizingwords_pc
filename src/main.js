@@ -20,7 +20,8 @@ Vue.use(LayoutStore, {
     isFixedNavBar: true,
     layoutMode: 'ltr',
     themeColor: 'theme_color_blue',
-    theme: 'dark-side'
+    // theme: 'dark-side'
+    theme: 'light'
   },
   actions: {
     onLogout() {

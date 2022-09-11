@@ -3,16 +3,9 @@
     class="vaw-main-layout-container"
     :class="[!state.isCollapse ? 'main-layout-open-status': 'main-layout-close-status', state.isFixedNavBar ? 'main-layout_fixed-nav-bar' : 'main-layout']"
   >
-    <section :class="[!state.isCollapse ? 'nav-bar-open-status' : 'nav-bar-close-status',state.isFixedNavBar ? 'fixed-nav-bar' : '',!showNavBar ? 'tab-bar-top' : '']">
-      <NavBar v-if="showNavBar" />
-      <TabBar :show-humburger="isShowHeader" />
-    </section>
     <div class="main-base-style">
       <section class="main-section">
         <Main />
-      </section>
-      <section class="footer-wrapper">
-        <Footer />
       </section>
       <el-backtop target=".main-base-style">
         <div>
@@ -29,13 +22,11 @@
 </template>
 
 <script>
-import NavBar from './navbar/NavBar'
-import TabBar from './tabbar'
 import Main from './Main'
 import store from './store/index'
 export default {
   name: 'MainLayout',
-  components: { NavBar, Main, TabBar },
+  components: { Main },
   props: {
     showNavBar: {
       type: Boolean,
@@ -83,7 +74,7 @@ export default {
   }
 }
 .main-layout_fixed-nav-bar {
-  padding-top: $logoHeight + $tabHeight;
+  // padding-top: $logoHeight + $tabHeight;
   overflow-y: hidden;
   .main-base-style {
     height: 100%;
@@ -92,6 +83,7 @@ export default {
 }
 
 .vaw-main-layout-container {
+  background: #fff !important;
   height: 100%;
   box-sizing: border-box;
   transition: margin-left $transitionTime;
@@ -100,7 +92,7 @@ export default {
     padding: 10px;
   }
   .main-section {
-    min-height: calc(100% - #{$footerHeight});
+    // min-height: calc(100% - #{$footerHeight});
     overflow-x: hidden;
   }
   .fixed-nav-bar {
