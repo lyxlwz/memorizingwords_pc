@@ -101,8 +101,7 @@ export default {
     }
   },
   setDefaultOpeneds(data) {
-    // console.log(data, 5555555555555)
-    // this.state.defaultOpeneds = data.map(it => it.path)
+    this.state.defaultOpeneds = data.map(it => it.path)
   },
   ...cachedViewAction,
   ...visitedViewAction,

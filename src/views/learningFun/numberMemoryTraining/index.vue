@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div></div>
+  <div>数字记忆训练</div>
 </template>
 
 <script>

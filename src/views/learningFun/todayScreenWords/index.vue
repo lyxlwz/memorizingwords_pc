@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div></div>
+  <div>今日单词筛查</div>
 </template>
 
 <script>

@@ -7,11 +7,11 @@ import LayoutStore, { Layout } from '@/layouts/index'
 import { routes as constantRoutes } from '@/router'
 // import { baseAddress, getMenuListByRoleId } from '@/api/url'
 
-// import Cookies from 'js-cookie'
+import Cookies from 'js-cookie'
 import { toHump } from './utils'
 
-// import storageUtils from './storageUtils'
-// import menuStore from '@/layouts/store/index.js'
+import storageUtils from './storageUtils'
+import menuStore from '@/layouts/store/index.js'
 
 NProgress.configure({ showSpinner: false })
 
@@ -107,10 +107,10 @@ router.beforeEach((to, from, next) => {
         hidden: true
       })
       LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
-      // router.addRoutes(accessRoutes)
-      // storageUtils.saveData('router', [...constantRoutes, ...accessRoutes])
-      // Cookies.set('router', [...constantRoutes, ...accessRoutes])
-      // menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
+      router.addRoutes(accessRoutes)
+      storageUtils.saveData('router', [...constantRoutes, ...accessRoutes])
+      Cookies.set('router', [...constantRoutes, ...accessRoutes])
+      menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
 
       next({ ...to, replace: true })
 

@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div></div>
+  <div>易错单词筛查</div>
 </template>
 
 <script>
