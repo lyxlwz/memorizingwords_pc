@@ -50,12 +50,12 @@ export default {
 .title {
   margin-left: 10px;
   color: currentColor;
-  font-size: 14px;
+  font-size: 14x;
 }
 .el-submenu [class^="el-icon-"] {
   margin-right: 0;
   width: 1em;
   height: 1em;
-  font-size: 14px;
+  font-size: 22x;
 }
 </style>

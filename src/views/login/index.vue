@@ -31,6 +31,7 @@
               type="password"
               clearable
               prefix-icon="el-icon-lock"
+              @keyup.enter.native="enterClick"
             />
           </div>
           <div class="item-wrapper">
@@ -102,6 +103,22 @@ export default {
     this.$layoutStore.changeTheme(this.defaultTheme)
   },
   methods: {
+    // 回车点击
+    enterClick() {
+      if (!this.username) {
+        this.$errorMsg('请输入用户名')
+        return
+      }
+      if (!this.password) {
+        this.$errorMsg('请输入密码')
+        return
+      }
+      if (!this.verifyState) {
+        this.$errorMsg('滑动验证失败')
+        return
+      }
+      this.login()
+    },
     login() {
       if (!this.username) {
         this.$errorMsg('请输入用户名')
@@ -115,27 +132,28 @@ export default {
         this.$errorMsg('滑动验证失败')
         return
       }
-      this.$post({
-        url: this.$urlPath.login,
-        data: {
-          username: this.username,
-          password: this.password,
-          authLogin: this.authLogin ? '1' : '0'
-        }
-      })
-        .then((res) => {
-          this.$store
-            .dispatch('user/saveUserInfo', res.data)
-            .then((_) => {
-              this.$router.push({ path: this.redirect || '/index/main' })
-            })
-            .catch((error) => {
-              this.$errorMsg(error.message || '登录失败，未知异常')
-            })
-        })
-        .catch((error) => {
-          this.$errorMsg(error.message || '登录失败，未知异常')
-        })
+      this.$router.push({ path: this.redirect || '/index/main' })
+      // this.$post({
+      //   url: this.$urlPath.login,
+      //   data: {
+      //     username: this.username,
+      //     password: this.password,
+      //     authLogin: this.authLogin ? '1' : '0'
+      //   }
+      // })
+      //   .then((res) => {
+      //     this.$store
+      //       .dispatch('user/saveUserInfo', res.data)
+      //       .then((_) => {
+      //         this.$router.push({ path: this.redirect || '/index/main' })
+      //       })
+      //       .catch((error) => {
+      //         this.$errorMsg(error.message || '登录失败，未知异常')
+      //       })
+      //   })
+      //   .catch((error) => {
+      //     this.$errorMsg(error.message || '登录失败，未知异常')
+      //   })
     },
     onVerifySuccess() {
       this.verifyState = true

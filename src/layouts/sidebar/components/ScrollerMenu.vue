@@ -4,12 +4,15 @@
     wrap-class="scrollbar-wrap-class"
   >
     <el-menu
+      ref="menus"
       :default-active="$route.fullPath"
       mode="vertical"
       :collapse="state.isCollapse"
       :background-color="state.themeVariables[state.theme].menuColor"
       :text-color="state.themeVariables[state.theme].menuTextColor"
       :collapse-transition="false"
+      :default-openeds="state.defaultOpeneds"
+      @close="handleClose"
     >
       <slot></slot>
     </el-menu>
@@ -37,6 +40,11 @@ export default {
     return {
       state: store.state
     }
+  },
+  methods: {
+    handleClose(key, keyPath) {
+      this.$refs.menus.open(keyPath)
+    }
   }
 }
 </script>
@@ -48,5 +56,10 @@ export default {
 }
 .scrollbar-wrap-class {
   overflow: hidden !important;
+}
+.el-menu ::v-deep {
+  .el-submenu .el-submenu__title .el-submenu__icon-arrow {
+    visibility: hidden;
+  }
 }
 </style>

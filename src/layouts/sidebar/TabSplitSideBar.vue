@@ -238,6 +238,9 @@ export default {
   border-right: none !important;
 }
 ::v-deep {
+  .el-menu--collapse {
+    width: 100% !important;
+  }
   .el-menu--collapse .el-submenu__title span {
     display: none !important;
   }

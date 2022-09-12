@@ -1,29 +1,32 @@
 import router from '@/router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import store from '@/store'
-import service from '@/api/axios.config'
+// import store from '@/store'
+// import service from '@/api/axios.config'
 import LayoutStore, { Layout } from '@/layouts/index'
 import { routes as constantRoutes } from '@/router'
-import { baseAddress, getMenuListByRoleId } from '@/api/url'
+// import { baseAddress, getMenuListByRoleId } from '@/api/url'
 
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import { toHump } from './utils'
+
+// import storageUtils from './storageUtils'
+// import menuStore from '@/layouts/store/index.js'
 
 NProgress.configure({ showSpinner: false })
 
-function getRoutes() {
-  return service({
-    url: baseAddress + getMenuListByRoleId,
-    method: 'POST',
-    data: {
-      userId: store.state.user.userId,
-      roleId: store.state.user.roleId
-    }
-  }).then(res => {
-    return generatorRoutes(res.data)
-  })
-}
+// function getRoutes() {
+//   return service({
+//     url: baseAddress + getMenuListByRoleId,
+//     method: 'POST',
+//     data: {
+//       userId: store.state.user.userId,
+//       roleId: store.state.user.roleId
+//     }
+//   }).then(res => {
+//     return generatorRoutes(res.data)
+//   })
+// }
 
 function getComponent(it) {
   return resolve => {
@@ -75,10 +78,10 @@ function generatorRoutes(res) {
   return tempRoutes
 }
 
-function isTokenExpired() {
-  const token = Cookies.get('admin-token')
-  return !!token
-}
+// function isTokenExpired() {
+//   const token = Cookies.get('admin-token')
+//   return !!token
+// }
 
 const whiteList = ['login']
 
@@ -88,30 +91,46 @@ router.beforeEach((to, from, next) => {
     next()
     NProgress.done()
   } else {
-    if (!isTokenExpired()) {
-      next(`/login?redirect=${to.path}`)
-      NProgress.done()
+    // if (!isTokenExpired()) {
+    //   next(`/login`)
+    //   NProgress.done()
+    // } else {
+    const isEmptyRoute = LayoutStore.isEmptyPermissionRoute()
+    if (isEmptyRoute) {
+      // 加载路由
+
+      const accessRoutes = generatorRoutes([])
+      // todo  处理路由数据
+      accessRoutes.push({
+        path: '*',
+        redirect: '/404',
+        hidden: true
+      })
+      LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
+      // router.addRoutes(accessRoutes)
+      // storageUtils.saveData('router', [...constantRoutes, ...accessRoutes])
+      // Cookies.set('router', [...constantRoutes, ...accessRoutes])
+      // menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
+
+      next({ ...to, replace: true })
+
+      // const accessRoutes = []
+      // getRoutes().then(async routes => {
+      //   accessRoutes.push(...routes)
+      //   accessRoutes.push({
+      //     path: '*',
+      //     redirect: '/404',
+      //     hidden: true
+      //   })
+      //   LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
+      //   router.addRoutes(accessRoutes)
+      //   next({ ...to, replace: true })
+      // })
     } else {
-      const isEmptyRoute = LayoutStore.isEmptyPermissionRoute()
-      if (isEmptyRoute) {
-        // 加载路由
-        const accessRoutes = []
-        getRoutes().then(async routes => {
-          accessRoutes.push(...routes)
-          accessRoutes.push({
-            path: '*',
-            redirect: '/404',
-            hidden: true
-          })
-          LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
-          router.addRoutes(accessRoutes)
-          next({ ...to, replace: true })
-        })
-      } else {
-        next()
-      }
+      next()
     }
   }
+  // }
 })
 
 router.afterEach((to, from) => {

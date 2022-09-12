@@ -64,12 +64,16 @@ export default {
 .title {
   margin-left: 10px;
   color: currentColor;
-  font-size: 14px;
+  font-size: 14x;
 }
 .el-menu-item [class^="el-icon-"] {
   margin-right: 0;
   width: 1em;
   height: 1em;
-  font-size: 14px;
+  font-size: 22x;
+}
+
+.menu-item-wrapper {
+  border-radius: 10px;
 }
 </style>

@@ -40,7 +40,8 @@ export default {
       showMessage: true,
       showFullScreen: true,
       showRefresh: true
-    }
+    },
+    defaultOpeneds: []
   },
   start({ state, actions }) {
     state && (this.state = Object.assign(this.state, state))
@@ -98,6 +99,10 @@ export default {
     if (item && item.meta) {
       item.meta.icon = icon
     }
+  },
+  setDefaultOpeneds(data) {
+    // console.log(data, 5555555555555)
+    // this.state.defaultOpeneds = data.map(it => it.path)
   },
   ...cachedViewAction,
   ...visitedViewAction,
