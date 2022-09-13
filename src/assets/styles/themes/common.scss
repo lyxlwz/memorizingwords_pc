@@ -87,7 +87,8 @@
   }
 
   .el-menu-item.is-active {
-    background-color: $menuActiveBgColor !important;
+    // background-color: $menuActiveBgColor !important;
+    background-color: #3d5cff !important;
   }
 
   .el-badge__content {

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container padding-lr-xl">
     <div class="flex justify-end margin-tb-sm">
       <!--       style="position: relative" -->
       <el-input
@@ -41,13 +41,13 @@
         :span="6"
       >
         <div
-          class="text-white text-df border-radius flex justify-center flex-direction padding-lg card-item"
+          class="text-white text-xl border-radius flex justify-center flex-direction padding-lg card-item"
           :style="{'background-color':item.backgroundColor}"
         >
           <div>
             {{ item.title }}
           </div>
-          <div class="text-xxl">
+          <div style="font-size: 60px;">
             {{ item.number }}
           </div>
         </div>
@@ -59,19 +59,26 @@
       class="flex align-center justify-center"
     >
       <div
-        class="border-radius padding-xl text-xxl margin-top flex justify-between"
-        style="background-color:red;width:60%;height:40%;"
+        class="border-radius margin-top flex justify-between text-bold"
+        style="background-color:rgb(239, 224, 255);width:60%; padding:60px;"
       >
         <div style="max-width:400px;">
-          <div class="text-bold">{{ proverbs.title }}</div>
-          <div class="margin-top-sm text-xl">
+          <div
+            class="text-sl"
+            style="font-size:32px;color:#4d5156"
+          >{{ proverbs.title }}</div>
+          <div
+            class="margin-top-sm word-text-color text-xxl"
+            style="line-height:60px;"
+          >
             {{ proverbs.message }}
           </div>
         </div>
         <div>
           <img
-            :src="require('@/assets/img_avatar_default.png')"
+            :src="require('@/assets/word/index.png')"
             alt=""
+            style="width:300px;height:300px;"
           />
         </div>
       </div>
@@ -117,22 +124,22 @@ export default {
     getData() {
       this.dataList = [
         {
-          backgroundColor: 'pink',
+          backgroundColor: 'rgb(250, 112, 139',
           title: '今日待学单词',
           number: '201'
         },
         {
-          backgroundColor: 'blue',
+          backgroundColor: 'rgb(56, 172, 245)',
           title: '累积学习单词',
           number: '9000'
         },
         {
-          backgroundColor: 'purple',
+          backgroundColor: 'rgb(142, 107, 235)',
           title: '目标学习单词',
           number: '20000'
         },
         {
-          backgroundColor: 'green',
+          backgroundColor: 'rgb(63, 200, 169)',
           title: '剩余未学单词',
           number: '11000'
         }
@@ -240,7 +247,7 @@ export default {
 }
 
 .card-item {
-  height: 140px;
+  height: 200px;
 }
 
 .content {

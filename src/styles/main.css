@@ -1302,10 +1302,6 @@ body .el-table__fixed::before {
   border-left: 1px dashed #ddd;
 }
 
-.border-radius {
-  border-radius: 10px
-}
-
 .mask {
   background-color: rgb(0, 0, 0);
   opacity: 0.85;
@@ -1316,4 +1312,50 @@ body .el-table__fixed::before {
   height: 100%;
   z-index: 999;
   padding: 10px;
+}
+
+
+.word-blue-bgcolor{
+  background-color:#3D5CFF ;
+}
+.word-gray-bgcolor{
+  background-color:#738394 ;
+}
+
+.word-info-bgcolor{
+  background-color:#e1e3e5 ;
+}
+
+.word-border-color{
+  color:#EEEEEE
+}
+
+.word-text-color{
+ color:#7F7F7F
+}
+
+.word-text-info-color{
+ color:#e1e3e5
+}
+
+.word-text-dark-color{
+ color:#2E3032
+}
+
+.word-text-light-color{
+ color:#909399
+}
+
+
+.border-radius {
+  border-radius: 10px
+}
+
+.restore-page{
+  /* margin: -10px; */
+  background-clip:padding-box;
+}
+
+.h-100{
+  height: 100vh;
 }

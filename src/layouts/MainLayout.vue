@@ -89,7 +89,7 @@ export default {
   transition: margin-left $transitionTime;
   .main-base-style {
     box-sizing: border-box;
-    padding: 10px;
+    // padding: 10px;
   }
   .main-section {
     // min-height: calc(100% - #{$footerHeight});
