@@ -93,7 +93,9 @@ export default {
   data() {
     return {
       serchVal: '',
-      nowDate: ''
+      nowDate: '',
+      showInpitMask: false,
+      serchList: []
     }
   },
   computed: {},
