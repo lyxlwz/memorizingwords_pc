@@ -1315,35 +1315,38 @@ body .el-table__fixed::before {
 }
 
 
-.word-blue-bgcolor{
-  background-color:#3D5CFF ;
-}
-.word-gray-bgcolor{
-  background-color:#738394 ;
+.word-blue-bgcolor {
+  background-color: #3D5CFF;
 }
 
-.word-info-bgcolor{
-  background-color:#e1e3e5 ;
+.word-gray-bgcolor {
+  background-color: #738394;
 }
 
-.word-border-color{
-  color:#EEEEEE
+.word-info-bgcolor {
+  /* background-color:#e1e3e5 ; */
+  background-color: rgb(225, 227, 229, 0.15);
+  color: #cdcbce;
 }
 
-.word-text-color{
- color:#7F7F7F
+.word-border-color {
+  color: #EEEEEE
 }
 
-.word-text-info-color{
- color:#e1e3e5
+.word-text-color {
+  color: #7F7F7F
 }
 
-.word-text-dark-color{
- color:#2E3032
+.word-text-info-color {
+  color: #e1e3e5
 }
 
-.word-text-light-color{
- color:#909399
+.word-text-dark-color {
+  color: #2E3032
+}
+
+.word-text-light-color {
+  color: #909399
 }
 
 
@@ -1351,11 +1354,23 @@ body .el-table__fixed::before {
   border-radius: 10px
 }
 
-.restore-page{
-  /* margin: -10px; */
-  background-clip:padding-box;
+.restore-page {
+  background-clip: padding-box;
 }
 
-.h-100{
+.h-100 {
   height: 100vh;
+}
+
+
+.word-input-mask {
+  position: absolute;
+  top: 10%;
+  right: 1%;
+  width: 32.8%;
+  height: inherit;
+}
+
+.word-input-mask-list {
+  height: 80%;
 }

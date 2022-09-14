@@ -13,16 +13,16 @@
       <!-- 搜索蒙层 -->
       <MaskContent :show-mask.sync="showInpitMask">
         <transition>
-          <div class="content">
-            <div class="content-title text-bold">查询结果</div>
+          <div class="word-input-mask">
+            <div class="word-input-mask-title text-bold">查询结果</div>
             <el-scrollbar
-              class="scrollbar content-list"
+              class="scrollbar word-input-mask-list"
               wrap-class="scrollbar-wrap-class"
             >
               <div
                 v-for="(word,index) in serchList"
                 :key="index"
-                class="content-list-item solids-bottom margin-tb-sm"
+                class="word-input-mask-list-item solids-bottom margin-tb-sm"
                 @click="jumpLearnWords(word)"
               >
                 <div class="word-name">{{ word.wordName }}</div>
@@ -248,18 +248,6 @@ export default {
 
 .card-item {
   height: 200px;
-}
-
-.content {
-  position: absolute;
-  top: 10%;
-  right: 1%;
-  width: 32.8%;
-  height: inherit;
-
-  &-list {
-    height: 80%;
-  }
 }
 
 .scrollbar-wrap-class {
