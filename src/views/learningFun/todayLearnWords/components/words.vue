@@ -5,8 +5,11 @@
       <span class="border-radius padding-xs word-info-bgcolor text-xs flex">
         <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
         <play-words
+          ref="wordLink"
           :audio-link="wordObj.wordLink"
           play-id="wordLink"
+          :is-play.sync="wordIsPlay"
+          @beforePlay="beforWordPlay"
         />
       </span>
       <span class="word-text-info-color margin-left-xs">{{ wordObj.phoneticSymbol }}</span>
@@ -26,9 +29,16 @@
     </div>
 
     <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area">
-      <!-- <el-input v-model="wordAssociate" /> -->
-      <div>{{ wordObj.wordAssociate }}</div>
-      <div class="text-right margin-top">
+      <div v-html="wordObj.wordAssociate"></div>
+      <RichTextEditor
+        v-if="isEditorAssociate"
+        v-model="wordObj.wordAssociate"
+        class="word-area-btn rich-text-editor"
+      />
+      <div
+        class="text-right margin-top"
+        @dblclick="isEditorAssociate = true"
+      >
         <span class="text-center border-radius word-area-btn text-sm">联想</span>
       </div>
     </div>
@@ -38,37 +48,44 @@
         <div class="border-radius word-info-bgcolor padding-xs flex">
           <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
           <play-words
+            ref="wordExampleLink"
             :audio-link="wordObj.wordExampleLink"
             play-id="wordExampleLink"
+            :is-play.sync="exampleIsPlay"
+            @beforePlay="beforeExamplePlay"
           />
         </div>
       </div>
       <div class="margin-left-sm">
-        <div>{{ wordObj.wordExample }}</div>
-        <div class="text-right margin-top">
+        <div v-html="wordObj.wordExample"></div>
+        <RichTextEditor
+          v-if="isEditorExample"
+          v-model="wordObj.wordExample"
+          :height="100"
+          class="word-area-btn rich-text-editor"
+        />
+        <div
+          class="text-right margin-top"
+          @dblclick="isEditorExample = true"
+        >
           <span class="text-center border-radius word-area-btn text-sm">例句</span>
         </div>
       </div>
-    </div>
-
-    <div class="flex justify-between margin-top-xl">
-      <el-button
-        round
-        class="word-btn"
-      >上一词</el-button>
-      <el-button
-        round
-        class="word-btn"
-      >下一词</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import playWords from './playWords.vue'
 export default {
   name: 'Words',
-  components: { playWords },
+  components: {
+    playWords(resolve) {
+      require(['./playWords'], resolve)
+    },
+    RichTextEditor(resolve) {
+      require(['@/components/common/RichTextEditor'], resolve)
+    }
+  },
   props: {
     wordObj: {
       type: Object,
@@ -79,6 +96,11 @@ export default {
   },
   data() {
     return {
+      wordIsPlay: false,
+      exampleIsPlay: false,
+      wordIds: ['wordLink', 'wordExampleLink'],
+      isEditorAssociate: false,
+      isEditorExample: false
     }
   },
 
@@ -86,7 +108,23 @@ export default {
 
   mounted() { },
 
-  methods: {}
+  methods: {
+    beforWordPlay() {
+      this.stopAllAudio()
+      this.wordIsPlay = false
+      console.log('beforWordPlay', this)
+    },
+    beforeExamplePlay() {
+      this.stopAllAudio()
+      this.exampleIsPlay = false
+      console.log('beforeExamplePlay')
+    },
+    stopAllAudio() {
+      this.wordIds.forEach(wordId => {
+        this.$refs[wordId].pause()
+      })
+    }
+  }
 }
 
 </script>
@@ -106,16 +144,19 @@ export default {
       background: rgb(255, 255, 255, 0.2);
       padding: 5px 20px;
     }
-  }
-
-  &-btn {
-    background: rgb(225, 227, 229, 0.15);
-    color: #ddd;
-    font-weight: bold;
-    border: none;
+    .rich-text-editor {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
   }
 }
 .word-dashed-bottom {
   border-bottom: 2px dashed #ddd;
+}
+
+::v-deep .ql-toolbar.ql-snow {
+  background: #fff !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
 }
 </style>

@@ -3,13 +3,14 @@
     <div
       class="bg"
       :class="[isPlay ? 'voicePlay' :'']"
-      @click="playVoice"
+      @click="beforePlay"
     ></div>
 
     <div id="bdtts_div_id">
       <audio
         :ref="playId"
         @ended="endVoicey"
+        @canplay="playVoice"
       >
       </audio>
     </div>
@@ -28,15 +29,13 @@ export default {
       type: String,
       default: 'audio'
     },
-    startPlay: {
+    isPlay: {
       type: Boolean,
       default: false
     }
   },
   data() {
     return {
-      isPlay: false,
-      isPlayId: ''
     }
   },
   mounted() {
@@ -44,31 +43,29 @@ export default {
   },
 
   methods: {
+    beforePlay() {
+      this.$refs[this.playId].src = this.audioLink
+      this.$emit('beforePlay')
+    },
     playVoice() {
-      console.log(this.isPlayId !== '', this.isPlayId !== this.playId, '判断')
-      console.log(this.isPlayId, '老的')
-      console.log(this.playId, '新的')
-      if (this.isPlayId !== '' && this.isPlayId !== this.playId) {
-        // 播放的新的音频,暂停原来的音频
-        this.$refs[this.isPlayId].pause()
+      if (this.isPlay) {
+        this.pause()
       } else {
-        this.$refs[this.playId].src = this.audioLink
-        if (this.isPlay) {
-          console.log('在播放了1111,当前id', this.playId)
-          this.$refs[this.playId].pause()
-          this.isPlay = false
-        } else {
-          this.isPlayId = this.playId
-          console.log('在播放了222,当前id', this.playId)
-          console.log('在播放了222,当前isPlayId', this.isPlayId)
-          this.$refs[this.playId].play()
-          this.isPlay = true
-        }
+        this.play()
       }
     },
     endVoicey() {
-      this.isPlay = false
-      this.isLoop = false
+      this.$emit('update:isPlay', false)
+    },
+    // 暂停
+    pause() {
+      this.$refs[this.playId].pause()
+      this.$emit('update:isPlay', false)
+    },
+    // 播放
+    play() {
+      this.$refs[this.playId].play()
+      this.$emit('update:isPlay', true)
     }
   }
 }

@@ -8,13 +8,19 @@
 
 <script>
 import Quill from 'quill'
+import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 export default {
   name: 'RichTextEditor',
   props: {
     height: {
       type: [Number, String],
       default: 'auto'
+    },
+    value: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -31,12 +37,13 @@ export default {
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'], // 切换按钮
-            ['blockquote', 'code-block'],
+            // ['blockquote', 'code-block'],
+            ['blockquote'],
 
             [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ script: 'sub' }, { script: 'super' }], // 上标/下标
+            // [{ script: 'sub' }, { script: 'super' }], // 上标/下标
             [{ indent: '-1' }, { indent: '+1' }], // 减少缩进/缩进
-            [{ direction: 'rtl' }], // 文本下划线
+            // [{ direction: 'rtl' }], // 文本下划线
 
             [{ size: ['small', false, 'large', 'huge'] }], // 用户自定义下拉
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -44,7 +51,7 @@ export default {
             [{ color: [] }, { background: [] }], // 主题默认下拉，使用主题提供的值
             [{ align: [] }],
 
-            ['link', 'image'],
+            // ['link', 'image'],
 
             ['clean'] // 清除格式
           ]
@@ -53,12 +60,12 @@ export default {
         theme: 'snow'
       }
       this.quill = new Quill(this.$refs.richTextEditor, options)
-    },
-    getHtmlContent() {
-      return this.$refs.richTextEditor.firstChild.innerHTML
-    },
-    getJsonContent() {
-      return JSON.stringify(this.quill.getContents())
+      this.quill.pasteHTML(0, this.value)
+      const index = this.quill.selection.savedRange.index // 获取光标位置
+      this.quill.setSelection(index) // 光标移到插入内容后面
+      this.quill.on('text-change', () => {
+        this.$emit('input', this.$refs.richTextEditor.firstChild.innerHTML)
+      })
     }
   }
 }

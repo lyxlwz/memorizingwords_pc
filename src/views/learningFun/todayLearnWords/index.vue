@@ -58,8 +58,25 @@
         :span="8"
         :offset="8"
       >
-        <div class="padding-lg margin-top-xl">
+        <div class="padding margin-top-xl">
+          <!-- <div class="flex justify-center">
+            <el-button
+              round
+              class="word-btn"
+            >查看释意</el-button>
+          </div> -->
           <words :word-obj="wordObj" />
+
+          <div class="flex justify-around margin-top-xl">
+            <el-button
+              round
+              class="word-btn"
+            >上一词</el-button>
+            <el-button
+              round
+              class="word-btn"
+            >下一词</el-button>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -188,9 +205,9 @@ export default {
             wordMean: '诉诸，采取'
           }
         ],
-        wordAssociate: '热（re）瘦（s）的鸡蛋（o）热（r）的头（t）疼',
+        wordAssociate: '<p>热（<span style="color: rgb(225, 60, 57);">re</span>）瘦（<span style="color: rgb(225, 60, 57);">s</span>）的鸡蛋（<span style="color: rgb(225, 60, 57);">o</span>）热（<span style="color: rgb(225, 60, 57);">r</span>）的头（<span style="color: rgb(225, 60, 57);">t</span>）疼</p><p></p>',
         wordExampleLink: 'https://tts.youdao.com/fanyivoice?word=example.mp3',
-        wordExample: 'This place is just so charming, the perfect winter resort.这个地方实在是太好啦，完美的冬季旅游胜地！'
+        wordExample: '<p>This place is just so charming, the perfect <span style="background-color: transparent;">winter resort.</span></p><p>这个地方实在是太好啦，完美的冬季旅游胜地！</p>'
       }
     }
   }
@@ -198,4 +215,11 @@ export default {
 
 </script>
 <style lang='scss' scoped>
+.word-btn {
+  background: rgb(225, 227, 229, 0.15);
+  color: #ddd;
+  font-weight: bold;
+  border: none;
+  width: 30%;
+}
 </style>
