@@ -5,6 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import './router'
 
+import XTable from '@/components/table/XTable/XTable'
 import TableHeader from '@/components/table/TableHeader'
 import TableFooter from '@/components/table/TableFooter'
 import TableBody from '@/components/table/TableBody'
@@ -19,6 +20,7 @@ Vue.use(Element)
 Vue.use(permission)
 
 // 注册成为全局的组件
+Vue.component('XTable', XTable)
 Vue.component('TableHeader', TableHeader)
 Vue.component('TableFooter', TableFooter)
 Vue.component('TableBody', TableBody)

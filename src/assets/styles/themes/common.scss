@@ -214,6 +214,8 @@
 
   .el-input__inner {
     background-color: $mainContentBgColor;
+    border-color: rgb(228, 232, 238);
+    border-radius: 10px;
   }
 
   .el-tabs__item {
@@ -352,7 +354,10 @@
   .el-input-group__prepend {
     background-color: $mainCardBgColor;
     color: $mainTextColor;
-    border: 1px solid $mainCardBorderColor;
+    // border: 1px solid $mainCardBorderColor;
+    border-color: rgb(228, 232, 238);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
   }
 
   .el-select-dropdown {

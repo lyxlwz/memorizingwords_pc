@@ -1,7 +1,8 @@
 <template>
   <div class="word-blue-bgcolor restore-page h-100 padding-lg text-white text-df">
-    <el-row>
+    <el-row style="height:120px">
       <el-col
+        v-if="isShowTodayWrods"
         :span="8"
         class="text-xl text-bold"
       >
@@ -14,7 +15,7 @@
 
       <el-col
         :span="8"
-        :offset="8"
+        :offset="isShowTodayWrods ? 8 : 16"
         class="flex justify-end"
       >
         <el-input
@@ -59,23 +60,40 @@
         :offset="8"
       >
         <div class="padding margin-top-xl">
-          <!-- <div class="flex justify-center">
+          <div
+            v-if="!isShowTodayWrods"
+            class="flex align-center  flex-direction"
+          >
+            <div class="text-bold text-xxl">{{ $route.meta.title }}</div>
+            <div
+              class="word-info-bgcolor border-radius flex align-center justify-center"
+              style="width:50%; margin: 50px 0;"
+            >
+              <span class="padding text-bold text-xxl ">20</span>
+            </div>
             <el-button
               round
               class="word-btn"
-            >查看释意</el-button>
-          </div> -->
-          <words :word-obj="wordObj" />
+              @click="changeTodayWrods(true)"
+            >开始筛查</el-button>
+          </div>
 
-          <div class="flex justify-around margin-top-xl">
-            <el-button
-              round
-              class="word-btn"
-            >上一词</el-button>
-            <el-button
-              round
-              class="word-btn"
-            >下一词</el-button>
+          <div v-else>
+            <words
+              :word-obj="wordObj"
+              :check-mean="checkMean"
+            />
+
+            <div class="flex justify-around margin-top-xl">
+              <el-button
+                round
+                class="word-btn"
+              >上一词</el-button>
+              <el-button
+                round
+                class="word-btn"
+              >下一词</el-button>
+            </div>
           </div>
         </div>
       </el-col>
@@ -97,22 +115,24 @@ export default {
       nowDate: '',
       showInpitMask: false,
       serchList: [],
-      wordObj: {}
+      wordObj: {},
+      isShowTodayWrods: false
     }
   },
-  computed: {},
+  computed: {
+    checkMean() {
+      return this.$route.name !== 'todayLearnWords'
+    }
+  },
   created() {
     const that = this
     saveRouteParams(that)
     console.log(this.$route, this.$store, this.$route.params, '----99999999999')
-    this.nowDate = new Date().toLocaleDateString()
-    // this.researchPlanId = this.$route.params.id
-    // this.researchPlanName = this.$route.params.name
+
+    this.initData()
 
     this.getData()
   },
-
-  mounted() { },
 
   methods: {
     getData() {
@@ -209,6 +229,17 @@ export default {
         wordExampleLink: 'https://tts.youdao.com/fanyivoice?word=example.mp3',
         wordExample: '<p>This place is just so charming, the perfect <span style="background-color: transparent;">winter resort.</span></p><p>这个地方实在是太好啦，完美的冬季旅游胜地！</p>'
       }
+    },
+    initData() {
+      this.nowDate = new Date().toLocaleDateString()
+      const showTodayWrods = this.$route.name !== 'fallibleWordScreen' && this.$route.name !== 'randomWordScreen'
+      this.changeTodayWrods(showTodayWrods)
+
+      // this.researchPlanId = this.$route.params.id
+      // this.researchPlanName = this.$route.params.name
+    },
+    changeTodayWrods(val) {
+      this.isShowTodayWrods = val
     }
   }
 }

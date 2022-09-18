@@ -1362,6 +1362,10 @@ body .el-table__fixed::before {
   height: 100vh;
 }
 
+.w-100{
+  width: 100vw;
+}
+
 
 .word-input-mask {
   position: absolute;

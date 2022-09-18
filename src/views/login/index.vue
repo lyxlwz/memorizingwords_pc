@@ -1,30 +1,9 @@
 <template>
   <div class="login-container">
-    <div
-      ref="loginWrapper"
-      class="login-bg-wrapper"
-    >
-      <img :src="$isMobile ? ImageMobileBg1 : ImageBg1" />
-    </div>
     <div class="flex form-wrapper">
-      <div class="left"></div>
-      <div class="right">
-        <div class="my-width flex-sub flex justify-center align-center">
-          <div class="logo-wrapper">
-            <!-- <img :src="require('@/assets/work_logo.png')" /> -->
-          </div>
-          <div class="title margin-left">Vue Admin Work</div>
-        </div>
+      <div class="center">
         <div class="form-container">
           <div class="item-wrapper">
-            <el-input
-              v-model="username"
-              placeholder="请输入用户名/手机号"
-              prefix-icon="el-icon-user"
-              clearable
-            />
-          </div>
-          <div class="item-wrapper margin-top-lg">
             <el-input
               v-model="password"
               placeholder="请输入密码"
@@ -32,12 +11,6 @@
               clearable
               prefix-icon="el-icon-lock"
               @keyup.enter.native="enterClick"
-            />
-          </div>
-          <div class="item-wrapper">
-            <VawVerify
-              class="margin-top-lg"
-              @verify-success="onVerifySuccess"
             />
           </div>
           <div class="flex-sub"></div>
@@ -51,37 +24,18 @@
             </el-button>
           </div>
         </div>
-        <div class="my-width flex-sub margin-top">
-          <div class="flex justify-between">
-            <el-checkbox v-model="autoLogin">自动登录</el-checkbox>
-            <el-link
-              :underline="false"
-              type="primary"
-            >忘记密码？</el-link>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ImageBg1 from '@/assets/img_login_bg_01.jpg'
-import ImageMobileBg1 from '@/assets/img_login_mobile_bg_01.jpg'
-import VawVerify from 'vaw-verify'
-import 'vaw-verify/lib/vaw-verify.css'
 export default {
   name: 'Login',
-  components: { VawVerify },
   data() {
     return {
-      username: 'admin',
-      password: '123456',
-      ImageBg1,
-      ImageMobileBg1,
+      password: '1234567',
       redirect: '',
-      autoLogin: true,
-      verifyState: false,
       defaultTheme: this.$layoutStore.state.theme
     }
   },
@@ -105,58 +59,37 @@ export default {
   methods: {
     // 回车点击
     enterClick() {
-      if (!this.username) {
-        this.$errorMsg('请输入用户名')
-        return
-      }
       if (!this.password) {
         this.$errorMsg('请输入密码')
-        return
-      }
-      if (!this.verifyState) {
-        this.$errorMsg('滑动验证失败')
         return
       }
       this.login()
     },
     login() {
-      if (!this.username) {
-        this.$errorMsg('请输入用户名')
-        return
-      }
       if (!this.password) {
         this.$errorMsg('请输入密码')
         return
       }
-      if (!this.verifyState) {
-        this.$errorMsg('滑动验证失败')
-        return
-      }
-      this.$router.push({ path: this.redirect || '/index/main' })
-      // this.$post({
-      //   url: this.$urlPath.login,
-      //   data: {
-      //     username: this.username,
-      //     password: this.password,
-      //     authLogin: this.authLogin ? '1' : '0'
-      //   }
-      // })
-      //   .then((res) => {
-      //     this.$store
-      //       .dispatch('user/saveUserInfo', res.data)
-      //       .then((_) => {
-      //         this.$router.push({ path: this.redirect || '/index/main' })
-      //       })
-      //       .catch((error) => {
-      //         this.$errorMsg(error.message || '登录失败，未知异常')
-      //       })
-      //   })
-      //   .catch((error) => {
-      //     this.$errorMsg(error.message || '登录失败，未知异常')
-      //   })
-    },
-    onVerifySuccess() {
-      this.verifyState = true
+      this.$post({
+        url: this.$urlPath.login,
+        data: {
+          key: this.password
+        }
+      })
+        .then((res) => {
+          console.log(res, '==res')
+          // this.$store
+          //   .dispatch('user/saveUserInfo', res.data)
+          //   .then((_) => {
+          //     this.$router.push({ path: this.redirect || '/index/main' })
+          //   })
+          //   .catch((error) => {
+          //     this.$errorMsg(error.message || '登录失败，未知异常')
+          //   })
+        })
+        .catch((error) => {
+          this.$errorMsg(error.message || '登录失败，未知异常')
+        })
     }
   }
 }
@@ -164,41 +97,9 @@ export default {
 
 <style lang="scss" scoped>
 .login-container {
-  position: relative;
   overflow: hidden;
   height: 100%;
   width: 100%;
-  .login-bg-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    & > img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-  .logo-wrapper {
-    & img {
-      width: 50px;
-    }
-    & img::after {
-      content: "欢迎来到memorizingwords";
-    }
-  }
-  .login-footer-wrapper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    ::v-deep {
-      .el-card {
-        background-color: transparent;
-      }
-    }
-  }
   .form-wrapper {
     position: absolute;
     top: 18.5%;
@@ -206,18 +107,12 @@ export default {
     right: 0;
     bottom: 15.8%;
     @media screen and (max-width: 768px) {
-      .left {
-        display: none;
-      }
-      .right {
+      .center {
         width: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
-        .my-width {
-          width: 80%;
-        }
         .title {
           display: block;
           text-align: center;
@@ -237,9 +132,6 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          .item-wrapper {
-            width: 100%;
-          }
           .login {
             width: 100%;
           }

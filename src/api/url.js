@@ -1,8 +1,8 @@
-export const baseAddress = 'http://localhost:8080'
+export const baseAddress = 'http://www.learning.com/public/index.php/index'
 
 export const test = '/test'
 
-export const login = '/login'
+export const login = '/login/check'
 
 export const updateUserInfo = '/updateUser'
 

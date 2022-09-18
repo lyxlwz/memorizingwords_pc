@@ -6,6 +6,7 @@
   >
     <div class="flex">
       <el-pagination
+        :background="isBackground"
         :current-page.sync="currentPage"
         :page-sizes="pageSizes"
         :page-size="pageSize"
@@ -40,20 +41,24 @@ export default {
     pageSizes: {
       type: Array,
       default: function () {
-        return [10, 20, 30, 40]
+        return [10, 20, 50, 100]
       }
     },
     pageSize: {
       type: Number,
-      default: 10
+      default: 20
     },
     totalSize: {
       type: Number,
-      default: 10
+      default: 20
     },
     showRefresh: {
       type: Boolean,
       default: true
+    },
+    isBackground: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

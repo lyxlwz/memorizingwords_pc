@@ -101,7 +101,7 @@ export const routes = [
       {
         path: '/todayScreenWords',
         name: 'todayScreenWords',
-        component: () => import('@/views/learningFun/todayScreenWords'),
+        component: () => import('@/views/learningFun/todayLearnWords'),
         meta: {
           title: '今日单词筛查',
           icon: 'el-icon-s-tools'
@@ -110,7 +110,7 @@ export const routes = [
       {
         path: '/fallibleWordScreen',
         name: 'fallibleWordScreen',
-        component: () => import('@/views/learningFun/fallibleWordScreen'),
+        component: () => import('@/views/learningFun/todayLearnWords'),
         meta: {
           title: '易错单词筛查',
           icon: 'el-icon-s-tools'
@@ -119,7 +119,7 @@ export const routes = [
       {
         path: '/randomWordScreen',
         name: 'randomWordScreen',
-        component: () => import('@/views/learningFun/randomWordScreen'),
+        component: () => import('@/views/learningFun/todayLearnWords'),
         meta: {
           title: '随机单词筛查',
           icon: 'el-icon-s-tools'

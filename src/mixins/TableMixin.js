@@ -42,26 +42,14 @@ export const PageModelMixin = {
 
 const tableEvents = {
   pageChanged() {
-    this.doRefresh()
+    this.getData()
   }
 }
 
 export default {
   data() {
     return {
-      dataList: [],
-      tableConfig: {
-        stripe: this.$layoutStore.state.theme !== 'dark',
-        border: this.$layoutStore.state.theme !== 'dark',
-        size: 'small',
-        headerCellStyle: this.$layoutStore.state.theme === 'dark' ? {
-          color: '#ffffff'
-        } : {
-          backgroundColor: 'rgb(255, 255, 255)',
-          color: '#333333'
-        },
-        height: '100%'
-      },
+      tableData: [],
       tableLoading: false
     }
   },
@@ -72,9 +60,9 @@ export default {
     })
   },
   methods: {
-    handleSuccess({ data = [], totalSize = 10 }) {
+    handleSuccess({ data = [], totalSize = 20 }) {
       this.publishEvent('setTotalSize', totalSize)
-      this.dataList = data
+      this.tableData = data
     }
   },
   created() {

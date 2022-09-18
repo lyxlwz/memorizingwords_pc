@@ -14,61 +14,75 @@
       </span>
       <span class="word-text-info-color margin-left-xs">{{ wordObj.phoneticSymbol }}</span>
     </div>
+
     <div
-      v-for="(item,index) in wordObj.wordsMean"
-      :key="index"
-      class="margin-top-lg text-lg"
+      v-if="checkMean"
+      class="flex justify-center margin-top-xl"
     >
-      <div>
-        <span class="word-text-info-color">{{ item.wordType }}</span>
-        <span class="margin-left-xs">
-          <span class="word-dashed-bottom">{{ item.wordMean }}</span>
-          <!-- <span class="word-dashed-bottom margin-left-xs">采用的方法</span> -->
-        </span>
-      </div>
+      <el-button
+        round
+        class="word-btn"
+        @click="checkMean = false"
+      >查看释意</el-button>
     </div>
 
-    <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area">
-      <div v-html="wordObj.wordAssociate"></div>
-      <RichTextEditor
-        v-if="isEditorAssociate"
-        v-model="wordObj.wordAssociate"
-        class="word-area-btn rich-text-editor"
-      />
+    <div v-else>
       <div
-        class="text-right margin-top"
-        @dblclick="isEditorAssociate = true"
+        v-for="(item,index) in wordObj.wordsMean"
+        :key="index"
+        class="margin-top-lg text-lg"
       >
-        <span class="text-center border-radius word-area-btn text-sm">联想</span>
-      </div>
-    </div>
-
-    <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area flex">
-      <div class="text-xs">
-        <div class="border-radius word-info-bgcolor padding-xs flex">
-          <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
-          <play-words
-            ref="wordExampleLink"
-            :audio-link="wordObj.wordExampleLink"
-            play-id="wordExampleLink"
-            :is-play.sync="exampleIsPlay"
-            @beforePlay="beforeExamplePlay"
-          />
+        <div>
+          <span class="word-text-info-color">{{ item.wordType }}</span>
+          <span class="margin-left-xs">
+            <span class="word-dashed-bottom">{{ item.wordMean }}</span>
+            <!-- <span class="word-dashed-bottom margin-left-xs">采用的方法</span> -->
+          </span>
         </div>
       </div>
-      <div class="margin-left-sm">
-        <div v-html="wordObj.wordExample"></div>
+
+      <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area">
+        <div v-html="wordObj.wordAssociate"></div>
         <RichTextEditor
-          v-if="isEditorExample"
-          v-model="wordObj.wordExample"
-          :height="100"
+          v-if="isEditorAssociate"
+          v-model="wordObj.wordAssociate"
           class="word-area-btn rich-text-editor"
         />
         <div
           class="text-right margin-top"
-          @dblclick="isEditorExample = true"
+          @dblclick="isEditorAssociate = true"
         >
-          <span class="text-center border-radius word-area-btn text-sm">例句</span>
+          <span class="text-center border-radius word-area-btn text-sm">联想</span>
+        </div>
+      </div>
+
+      <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area flex">
+        <div class="text-xs">
+          <div class="border-radius word-info-bgcolor padding-xs flex">
+            <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
+            <play-words
+              ref="wordExampleLink"
+              :audio-link="wordObj.wordExampleLink"
+              play-id="wordExampleLink"
+              :is-play.sync="exampleIsPlay"
+              @beforePlay="beforeExamplePlay"
+            />
+          </div>
+        </div>
+        <div class="margin-left-sm">
+          <div v-html="wordObj.wordExample"></div>
+          <RichTextEditor
+            v-if="isEditorExample"
+            v-model="wordObj.wordExample"
+            :height="100"
+            class="word-area-btn rich-text-editor"
+          />
+          <div
+            class="text-right margin-top"
+            @dblclick="isEditorExample = true"
+          >
+            <span class="text-center border-radius word-area-btn text-sm">例句</span>
+          </div>
         </div>
       </div>
     </div>
@@ -91,6 +105,13 @@ export default {
       type: Object,
       default: () => {
         return {}
+      }
+    },
+    // 是否展示单词
+    checkMean: {
+      type: Boolean,
+      default: () => {
+        return false
       }
     }
   },
@@ -148,6 +169,14 @@ export default {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
     }
+  }
+
+  &-btn {
+    background: rgb(225, 227, 229, 0.15);
+    color: #ddd;
+    font-weight: bold;
+    border: none;
+    width: 30%;
   }
 }
 .word-dashed-bottom {
