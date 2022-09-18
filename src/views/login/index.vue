@@ -75,26 +75,27 @@ export default {
         this.$errorMsg('请输入密码')
         return
       }
-      this.$post({
-        url: this.$urlPath.login,
-        data: {
-          key: this.password
-        }
-      })
-        .then((res) => {
-          console.log(res, '==res')
-          // this.$store
-          //   .dispatch('user/saveUserInfo', res.data)
-          //   .then((_) => {
-          //     this.$router.push({ path: this.redirect || '/index/main' })
-          //   })
-          //   .catch((error) => {
-          //     this.$errorMsg(error.message || '登录失败，未知异常')
-          //   })
-        })
-        .catch((error) => {
-          this.$errorMsg(error.message || '登录失败，未知异常')
-        })
+      this.$router.push({ path: this.redirect || '/index/main' })
+      // this.$post({
+      //   url: this.$urlPath.login,
+      //   data: {
+      //     key: this.password
+      //   }
+      // })
+      //   .then((res) => {
+      //     console.log(res, '==res')
+      //     // this.$store
+      //     //   .dispatch('user/saveUserInfo', res.data)
+      //     //   .then((_) => {
+      //     //     this.$router.push({ path: this.redirect || '/index/main' })
+      //     //   })
+      //     //   .catch((error) => {
+      //     //     this.$errorMsg(error.message || '登录失败，未知异常')
+      //     //   })
+      //   })
+      //   .catch((error) => {
+      //     this.$errorMsg(error.message || '登录失败，未知异常')
+      //   })
     }
   }
 }

@@ -12,6 +12,8 @@ import TableBody from '@/components/table/TableBody'
 import Dialog from '@/components/common/Dialog'
 import SubmitButton from '@/components/common/SubmitButton'
 
+import { Notification } from 'element-ui'
+
 import * as eCharts from 'echarts'
 
 import permission from '@/directive/permission'
@@ -34,18 +36,34 @@ Vue.prototype.$urlPath = urlPath
 Vue.prototype.$isMobile = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
 Vue.prototype.$isAndroid = navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1
 
+// 通知窗口
 Vue.prototype.$successMsg = function (message = '') {
-  this.$message({
+  Notification.success({
     message,
     type: 'success',
-    duration: 5000
+    title: '成功消息'
+  })
+}
+Vue.prototype.$warningMsg = function (message = '') {
+  Notification.warning({
+    message,
+    type: 'warning',
+    title: '警告消息'
+  })
+}
+Vue.prototype.$infoMsg = function (message = '') {
+  Notification.info({
+    message,
+    type: 'info',
+    title: '消息'
   })
 }
 Vue.prototype.$errorMsg = function (message = '') {
-  this.$message({
+  Notification.error({
     message,
     type: 'error',
-    duration: 5000
+    title: '提示消息',
+    duration: 8500
   })
 }
 Vue.prototype.$showConfirmDialog = function (message = '') {

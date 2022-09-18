@@ -87,12 +87,15 @@
       <template>
         <!--表格-->
         <XTable
+          v-loading="tableLoading"
           style="height: calc(100% - 178px)"
           :minus-part="300"
           class="mt-2"
           :table-column="tableColumn"
           :table-data="tableData"
           :table-config="tableConfig"
+          @showDialog="showDialog"
+          @deleteOne="deleteOne"
         />
       </template>
     </TableBody>
@@ -153,6 +156,7 @@ export default {
 
   methods: {
     getData() {
+      this.tableLoading = true
       const data = {
         word: 'word1',
         paraphrase: '单词',
@@ -168,6 +172,7 @@ export default {
           }
         })
         console.log(this.tableData, '7777this.tableData')
+        this.tableLoading = false
 
         this.handleSuccess(
           {
@@ -185,6 +190,12 @@ export default {
           console.log('当页全选')
         }
       }
+    },
+    showDialog(data) {
+      console.log(data, '开始编辑')
+    },
+    deleteOne(data) {
+      console.log(data, '开始删除')
     }
   }
 }

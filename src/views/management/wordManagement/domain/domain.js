@@ -2,6 +2,10 @@ const domain = [
   {
     label: 'ID',
     prop: 'word_id'
+    // type: 'render',
+    // render: () => {
+
+    // }
   },
   {
     label: '单词',
@@ -25,7 +29,6 @@ const domain = [
   },
   {
     label: '操作',
-    width: '165px',
     fixed: 'right',
     headerAlign: 'center',
     alignStyle: 'justify-content: center;',

@@ -78,33 +78,33 @@ router.beforeEach((to, from, next) => {
     next()
     NProgress.done()
   } else {
-    if (!isTokenExpired()) {
-      next(`/login`)
-      NProgress.done()
+    // if (!isTokenExpired()) {
+    //   next(`/login`)
+    //   NProgress.done()
+    // } else {
+    const isEmptyRoute = LayoutStore.isEmptyPermissionRoute()
+    if (isEmptyRoute) {
+      // 加载路由
+
+      const accessRoutes = generatorRoutes([])
+      // todo  处理路由数据
+      accessRoutes.push({
+        path: '*',
+        redirect: '/404',
+        hidden: true
+      })
+      LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
+      router.addRoutes(accessRoutes)
+      storageUtils.saveData('router', [...constantRoutes, ...accessRoutes])
+      Cookies.set('router', [...constantRoutes, ...accessRoutes])
+      menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
+
+      next({ ...to, replace: true })
     } else {
-      const isEmptyRoute = LayoutStore.isEmptyPermissionRoute()
-      if (isEmptyRoute) {
-        // 加载路由
-
-        const accessRoutes = generatorRoutes([])
-        // todo  处理路由数据
-        accessRoutes.push({
-          path: '*',
-          redirect: '/404',
-          hidden: true
-        })
-        LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
-        router.addRoutes(accessRoutes)
-        storageUtils.saveData('router', [...constantRoutes, ...accessRoutes])
-        Cookies.set('router', [...constantRoutes, ...accessRoutes])
-        menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
-
-        next({ ...to, replace: true })
-      } else {
-        next()
-      }
+      next()
     }
   }
+  // }
 })
 
 router.afterEach((to, from) => {

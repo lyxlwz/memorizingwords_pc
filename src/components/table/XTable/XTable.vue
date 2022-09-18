@@ -16,7 +16,6 @@
       :stripe="tableConfig.stripe"
       :border="tableConfig.border"
       :size="tableConfig.size || 'medium'"
-      :align="tableConfig.align || 'center'"
       v-on="$listeners"
       @selection-change="selectionChange"
     >
@@ -48,6 +47,7 @@
         :key="index"
         :table-colum-config="item"
         v-bind="$attrs"
+        :table-config="tableConfig"
         v-on="$listeners"
       />
       <!-- 提供一个插槽  -->
@@ -160,5 +160,25 @@ export default {
   .el-link {
     font-size: 12px;
   }
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 10px;
+  background-color: transparent;
+} /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+*::-webkit-scrollbar-track {
+  // background-color: #f0f6ff;
+  background-color: rgba(117, 116, 116, 0.3);
+} /*定义滚动条轨道 内阴影+圆角*/
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+} /*定义滑块 内阴影+圆角*/
+.scrollbarHide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbarShow::-webkit-scrollbar {
+  display: block;
 }
 </style>
