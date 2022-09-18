@@ -224,7 +224,7 @@
 </template>
 
 <script>
-import XTableReder from './XTableReder.vue'
+import XTableReder from './TableReder.vue'
 export default {
   name: 'XtableTemplate',
   components: { XTableReder },

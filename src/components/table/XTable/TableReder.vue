@@ -16,7 +16,8 @@ export default {
     },
     rederStyle: {
       type: String,
-      require: true
+      require: true,
+      default: ''
     }
   },
   render: (h, ctx) => {

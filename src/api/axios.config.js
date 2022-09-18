@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import qs from 'qs'
 
-const baseIp = 'http://www.learning.com/public/index.php/index/'
+const baseIp = '/'
 
 export const CONTENT_TYPE = 'Content-Type'
 
