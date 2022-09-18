@@ -3,18 +3,23 @@
     <div class="flex form-wrapper">
       <div class="center">
         <div class="form-container">
-          <div class="item-wrapper">
+          <div class="bg">
+            <div class="text-bold login-title">登录</div>
+            <div class="bg-title">在下面输入你的密钥</div>
+          </div>
+          <div class="item-wrapper margin-top-xl flex align-center justify-center padding-lr-xl">
             <el-input
               v-model="password"
+              class="input-pwd"
               placeholder="请输入密码"
               type="password"
               clearable
               prefix-icon="el-icon-lock"
+              show-password
               @keyup.enter.native="enterClick"
             />
           </div>
-          <div class="flex-sub"></div>
-          <div class="margin-top-lg">
+          <div class="margin-top-xl padding-lr-xl">
             <el-button
               type="primary"
               class="login"
@@ -100,71 +105,96 @@ export default {
   overflow: hidden;
   height: 100%;
   width: 100%;
-  .form-wrapper {
-    position: absolute;
-    top: 18.5%;
-    left: 0;
-    right: 0;
-    bottom: 15.8%;
-    @media screen and (max-width: 768px) {
+  background: #fff;
+
+  @media screen and (max-width: 768px) {
+    .form-wrapper {
+      position: absolute;
+      top: 0%;
+      left: 0;
+      right: 0;
       .center {
         width: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        .title {
-          display: block;
-          text-align: center;
-          font-size: 20px;
-          font-weight: bold;
-          color: #34495e;
-          text-shadow: 0 0 0.2em #41b883, -0 -0 0.2em #41b883;
+        .bg {
+          height: 160px;
+          background: #3d5cff;
+          color: #fff;
+          padding: 40px;
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: column;
+          font-size: 16px;
+          .login-title {
+            font-size: 30px;
+          }
+          &-title {
+            font-size: 16px;
+            color: #d8d8d8;
+            margin-top: 5px;
+          }
         }
         .form-container {
-          width: 80%;
+          width: 100%;
           min-height: 60%;
-          text-align: center;
-          background: rgba(183, 183, 183, 0.2);
-          padding: 5%;
           border-radius: 5px;
-          border: 2px solid #fff;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          .login {
+          .item-wrapper {
             width: 100%;
+            ::v-deep.el-input__inner {
+              height: 50px;
+              font-size: 20px;
+            }
+          }
+          .login {
+            margin-top: 30px;
+            width: 100%;
+            background-color: #3d5cff;
+            border-radius: 10px;
+            height: 50px;
+            font-size: 20px;
           }
         }
       }
     }
-    @media screen and (min-width: 768px) and (max-width: 992px) {
-      .left {
-        display: none;
-      }
-      .right {
-        display: flex;
+  }
+  @media screen and (min-width: 768px) and (max-width: 992px) {
+    .form-wrapper {
+      position: absolute;
+      top: 18.5%;
+      left: 0;
+      right: 0;
+      bottom: 15.8%;
+      .center {
         width: 100%;
+        display: flex;
         flex-direction: column;
-        justify-content: space-around;
         align-items: center;
-        .my-width {
-          width: 48%;
-        }
-        .title {
-          display: block;
-          text-align: center;
+        .bg {
+          height: 180px;
+          background: #3d5cff;
+          color: #fff;
+          padding: 40px;
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: column;
           font-size: 20px;
-          font-weight: bold;
-          color: #5497ff;
+          .login-title {
+            font-size: 30px;
+          }
+          &-title {
+            font-size: 16px;
+            color: #d8d8d8;
+            margin-top: 5px;
+          }
         }
         .form-container {
-          width: 50%;
+          width: 35%;
           height: 60%;
           margin-bottom: 10%;
-          text-align: center;
-          background: rgba(183, 183, 183, 0.2);
-          padding: 5%;
           border-radius: 5px;
           border: 2px solid #fff;
           display: flex;
@@ -175,35 +205,60 @@ export default {
           }
           .login {
             width: 100%;
+            background-color: #3d5cff;
+            border-radius: 10px;
           }
         }
       }
     }
-    @media screen and (min-width: 992px) {
-      .left {
-        display: block;
-        flex: 1;
-      }
-      .right {
-        margin-left: 10%;
-        flex: 1;
+  }
+  @media screen and (min-width: 992px) {
+    .form-wrapper {
+      position: absolute;
+      top: 18.5%;
+      left: 0;
+      right: 0;
+      bottom: 15.8%;
+      .center {
+        width: 100%;
         display: flex;
-        justify-content: center;
         flex-direction: column;
-        .my-width {
-          width: 48%;
+        align-items: center;
+        .bg {
+          height: 180px;
+          background: #3d5cff;
+          color: #fff;
+          padding: 40px;
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: column;
+          font-size: 20px;
+          .login-title {
+            font-size: 30px;
+          }
+          &-title {
+            font-size: 16px;
+            color: #d8d8d8;
+            margin-top: 5px;
+          }
         }
-        .title {
-          display: block;
-          font-size: 24px;
-          font-weight: bold;
-          color: #5497ff;
-        }
-        .item-wrapper {
-          width: 48%;
-        }
-        .login {
-          width: 48%;
+        .form-container {
+          width: 24%;
+          height: 60%;
+          margin-bottom: 10%;
+          border-radius: 5px;
+          border: 2px solid #fff;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          .item-wrapper {
+            width: 100%;
+          }
+          .login {
+            width: 100%;
+            background-color: #3d5cff;
+            border-radius: 10px;
+          }
         }
       }
     }
