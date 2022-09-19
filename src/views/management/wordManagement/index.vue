@@ -31,6 +31,7 @@
           <el-button
             icon="el-icon-plus"
             style="background-color: #3D5CFF;color:#fff;border-radius:10px"
+            @click="importData"
           >单词导入</el-button>
         </div>
       </div>
@@ -66,7 +67,10 @@
           </div>
         </div>
 
-        <div class="word-text-color text-df text-bold">已选择{{ selData.length }}</div>
+        <div class="word-text-color text-df text-bold">
+          <span v-show="checkVal.includes('结果全选')">暂不显示</span>
+          <span v-show="!checkVal.includes('结果全选')">已选择{{ selData.length }}</span>
+        </div>
       </div>
 
       <div class="flex justify-end margin-tb-xl">
@@ -88,13 +92,13 @@
         <!--表格-->
         <XTable
           v-loading="tableLoading"
-          style="height: calc(100% - 178px)"
           :minus-part="300"
           class="mt-2"
           :table-column="tableColumn"
           :table-data="tableData"
           :table-config="tableConfig"
-          @showDialog="showDialog"
+          @rowClick="rowClick"
+          @modClick="modClick"
           @deleteOne="deleteOne"
         />
       </template>
@@ -138,12 +142,17 @@ export default {
         align: 'center',
         index: false, // 是否需要index列
         selection: false, // 是否需要多选列
-        headerCellStyle: { backgroundColor: 'rgb(236, 247, 255)', color: '#333333' }
+        headerCellStyle: { backgroundColor: 'rgb(236, 247, 255)', color: '#333333' },
+        rowClassName: ({ row, rowIndex }) => {
+          return this.tableRowClassName({ row, rowIndex })
+        }
       },
 
       selData: [],
       checkVal: [],
-      checkList: ['结果全选', '当页全选']
+      checkList: ['结果全选', '当页全选'],
+      winExport: false,
+      uploadFileAction: ''
     }
   },
 
@@ -167,7 +176,9 @@ export default {
       setTimeout(() => {
         this.tableData = Array(20).fill({}).map((item, index) => {
           return {
+            rowIndex: index,
             word_id: ++index,
+            checked: false,
             ...data
           }
         })
@@ -183,19 +194,82 @@ export default {
       }, 300)
     },
     checkBoxChange(val) {
-      if (val.length > 0) {
+      if (val.length > 1) {
+        this.checkVal.shift()
+      } else if (val.length > 0) {
         if (val.includes('结果全选')) {
           console.log('结果全选')
-        } else if (val.includes('当页全选')) {
-          console.log('当页全选')
         }
+        if (val.includes('当页全选')) {
+          console.log('当页全选')
+          this.selData = this.tableData
+        }
+      } else {
+        this.selData = []
       }
     },
-    showDialog(data) {
+    modClick(data) {
       console.log(data, '开始编辑')
+      if (data._columns.text === '编辑') {
+        this.modFun(data)
+      } else if (data._columns.text === '完成编辑') {
+        this.$showConfirmDialog('是否完成本次编辑？').then(() => {
+          this.modFun(data)
+          this.$successMsg('编辑成功！')
+        }).catch(() => { })
+      }
+    },
+    modFun(data) {
+      data.columns.forEach((column, columnIndex) => {
+        // if (columnIndex === data.index) {
+
+        console.log(columnIndex, data.rowIndex, '==data.rowIndex')
+        if (column.template[0].type === 'input') {
+          this.$set(column.template[0], 'isShow', !column.template[0].isShow)
+        }
+
+        if (column.template[0].text === '编辑') {
+          this.$set(column.template[0], 'text', '完成编辑')
+          this.$set(column.template[0], 'assemblyType', 'danger')
+        } else if (column.template[0].text === '完成编辑') {
+          this.$set(column.template[0], 'text', '编辑')
+          this.$set(column.template[0], 'assemblyType', 'primary')
+        }
+        // }
+      })
     },
     deleteOne(data) {
       console.log(data, '开始删除')
+    },
+    rowClick({ row, column, event }) {
+      this.$set(row, 'checked', !row.checked)
+      this.selData.forEach(data => {
+
+      })
+      if (row.checked) {
+        this.selData.push(row)
+      } else {
+        this.selData.forEach((data, index) => {
+          if (data.rowIndex === row.rowIndex) {
+            this.selData.splice(index, 1)
+          }
+        })
+      }
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (row.checked && rowIndex === row.rowIndex) {
+        return 'highlight-row'
+      }
+      // else {
+      //   return 'tab-row'
+      // }
+      // return
+    },
+    importData() {
+      this.winExport = true
+    },
+    success() {
+
     }
   }
 }
@@ -207,5 +281,20 @@ export default {
 }
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
+}
+
+.x-table {
+  ::v-deep.el-table__body .highlight-row {
+    background-color: #cdcbce !important;
+    // color: #3d5cff !important;
+    // color: #fff !important;
+    font-weight: bold !important;
+  }
+  // ::v-deep.el-table__body .tab-row {
+  //   // background-color: #3d5cff !important;
+  //   color: #909399 !important;
+  //   // color: #fff !important;
+  //   font-weight: bold !important;
+  // }
 }
 </style>

@@ -21,7 +21,7 @@
             !tableColumConfig.children
         "
         class="x-table-template"
-        :style="tableColumConfig.alignStyle || ''"
+        :style="tableColumConfig.alignStyle || 'justify-content: center;'"
       >
         <div
           v-for="(i, _index) in renderItem(
@@ -43,11 +43,14 @@
                   })
                   : false
               "
-              @click="
+              @click.stop="
                 emitFunc(i.method || 'defaultMethod', {
                   row: scope.row,
-                  index: scope.$index,
+                  rowIndex: scope.$index,
                   additionalParams: i.addParams || '',
+                  columns:scope._self.tableColumn,
+                  _columns:i,
+                  vueObj:scope._self.$options.parent.$parent.$parent
                 })
               "
             >
@@ -67,11 +70,14 @@
                   })
                   : false
               "
-              @click="
+              @click.stop="
                 emitFunc(i.method || 'defaultMethod', {
                   row: scope.row,
-                  index: scope.$index,
+                  rowIndex: scope.$index,
                   additionalParams: i.addParams || '',
+                  columns:scope._self.tableColumn,
+                  _columns:i,
+                  vueObj:scope._self.$options.parent.$parent.$parent
                 })
               "
             >
@@ -82,6 +88,7 @@
           <!-- input输入框 -->
           <template v-else-if="i.type === 'input'">
             <el-input
+              v-if="i.isShow"
               v-model="scope.row[`${tableColumConfig.prop}`]"
               class="x-table-input"
               :type="i.assemblyType || 'text'"
@@ -95,14 +102,20 @@
                   })
                   : false
               "
-              @blur="
+              @blur.stop="
                 emitFunc(i.method || 'defaultMethod', {
                   row: scope.row,
-                  index: scope.$index,
+                  rowIndex: scope.$index,
                   additionalParams: i.addParams || '',
+                  columns:scope._self.tableColumn,
+                  _columns:i,
+                  vueObj:scope._self.$options.parent.$parent.$parent
                 })
               "
             />
+            <span v-else>
+              {{ scope.row[`${tableColumConfig.prop}`] }}
+            </span>
           </template>
           <!-- 文字方面的 -->
           <template v-else-if="i.type === 'link'">
@@ -117,11 +130,14 @@
                   })
                   : false
               "
-              @click="
+              @click.stop="
                 emitFunc(i.method || 'defaultMethod', {
                   row: scope.row,
-                  index: scope.$index,
+                  rowIndex: scope.$index,
                   additionalParams: i.addParams || '',
+                  columns:scope._self.tableColumn,
+                  _columns:i,
+                  vueObj:scope._self.$options.parent.$parent.$parent
                 })
               "
             >
@@ -132,11 +148,14 @@
           <template v-else-if="i.type === 'span'">
             <span
               :style="i.spanStyle ? i.spanStyle(scope.row) : ''"
-              @click="
+              @click.stop="
                 emitFunc(i.method || 'defaultMethod', {
                   row: scope.row,
-                  index: scope.$index,
+                  rowIndex: scope.$index,
                   additionalParams: i.addParams || '',
+                  columns:scope._self.tableColumn,
+                  _columns:i,
+                  vueObj:scope._self.$options.parent.$parent.$parent
                 })
               "
             >
@@ -169,12 +188,15 @@
               "
               :type="i.assemblyType ? i.assemblyType() : 'primary'"
               :style="i.linkStyle"
-              @click="
+              @click.stop="
                 emitFunc(i.method || 'defaultMethod', {
                   row: scope.row,
-                  index: scope.$index,
+                  rowIndex: scope.$index,
                   additionalParams: i.addParams || '',
                   linkIndex: _xindex,
+                  columns:scope._self.tableColumn,
+                  _columns:i,
+                  vueObj:scope._self.$options.parent.$parent.$parent
                 })
               "
             >
@@ -194,11 +216,14 @@
                 })
                 : false
             "
-            @click="
+            @click.stop="
               emitFunc(i.method || 'defaultMethod', {
                 row: scope.row,
-                index: scope.$index,
+                rowIndex: scope.$index,
                 additionalParams: i.addParams || '',
+                columns:scope._self.tableColumn,
+                _columns:i,
+                vueObj:scope._self.$options.parent.$parent.$parent
               })
             "
           >{{ i.supplement(scope.row) }}
@@ -232,6 +257,11 @@ export default {
     tableColumConfig: {
       type: Object,
       default: () => { }
+    },
+    tableColumn: {
+      type: Array,
+      require: true,
+      default: () => []
     }
   },
   computed: {

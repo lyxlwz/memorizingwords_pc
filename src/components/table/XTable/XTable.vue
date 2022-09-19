@@ -15,9 +15,11 @@
       :header-cell-style="tableConfig.headerCellStyle"
       :stripe="tableConfig.stripe"
       :border="tableConfig.border"
+      :row-class-name="tableConfig.rowClassName"
       :size="tableConfig.size || 'medium'"
       v-on="$listeners"
       @selection-change="selectionChange"
+      @row-click="rowClick"
     >
       <!-- 多选列 -->
       <template
@@ -128,6 +130,9 @@ export default {
 
     selectionChange(val) {
       this.$emit('selectionChange', val)
+    },
+    rowClick(row, column, event) {
+      this.$emit('rowClick', { row, column, event })
     }
   }
 }
