@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import qs from 'qs'
 
-const baseIp = '/'
+const baseIp = 'http://154.213.21.110:80/index.php/index'
 
 export const CONTENT_TYPE = 'Content-Type'
 

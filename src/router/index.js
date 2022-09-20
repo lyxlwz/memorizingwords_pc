@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 
 import { Layout } from '@/layouts/index'
 
-import NextPageInfo from './next-page/routes'
-
 Vue.use(VueRouter)
 
 const originalPush = VueRouter.prototype.push
@@ -14,7 +12,6 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 }
 
 export const routes = [
-  ...NextPageInfo,
   {
     path: '/redirect',
     component: Layout,
@@ -31,22 +28,6 @@ export const routes = [
     name: 'login',
     component: () => import('@/views/login'),
     hidden: true
-  },
-  {
-    path: '/personal',
-    name: 'personal',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'center',
-        name: 'personalCenter',
-        component: () => import('@/views/personal'),
-        meta: {
-          title: '个人中心'
-        }
-      }
-    ]
   },
   {
     path: '/',

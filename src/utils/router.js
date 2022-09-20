@@ -1,16 +1,12 @@
 import router from '@/router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-// import store from '@/store'
-// import service from '@/api/axios.config'
 import LayoutStore, { Layout } from '@/layouts/index'
 import { routes as constantRoutes } from '@/router'
-// import { baseAddress, getMenuListByRoleId } from '@/api/url'
 
 import Cookies from 'js-cookie'
 import { toHump } from './utils'
 
-import storageUtils from './storageUtils'
 import menuStore from '@/layouts/store/index.js'
 
 NProgress.configure({ showSpinner: false })
@@ -78,33 +74,32 @@ router.beforeEach((to, from, next) => {
     next()
     NProgress.done()
   } else {
-    // if (!isTokenExpired()) {
-    //   next(`/login`)
-    //   NProgress.done()
-    // } else {
-    const isEmptyRoute = LayoutStore.isEmptyPermissionRoute()
-    if (isEmptyRoute) {
-      // 加载路由
-
-      const accessRoutes = generatorRoutes([])
-      // todo  处理路由数据
-      accessRoutes.push({
-        path: '*',
-        redirect: '/404',
-        hidden: true
-      })
-      LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
-      router.addRoutes(accessRoutes)
-      storageUtils.saveData('router', [...constantRoutes, ...accessRoutes])
-      Cookies.set('router', [...constantRoutes, ...accessRoutes])
-      menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
-
-      next({ ...to, replace: true })
+    if (!isTokenExpired()) {
+      next(`/login`)
+      NProgress.done()
     } else {
-      next()
+      const isEmptyRoute = LayoutStore.isEmptyPermissionRoute()
+      if (isEmptyRoute) {
+        // 加载路由
+
+        const accessRoutes = generatorRoutes([])
+        accessRoutes.push({
+          path: '*',
+          redirect: '/404',
+          hidden: true
+        })
+        LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
+        router.addRoutes(accessRoutes)
+        localStorage.setItem('router', [...constantRoutes, ...accessRoutes])
+        Cookies.set('router', [...constantRoutes, ...accessRoutes])
+        menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
+
+        next({ ...to, replace: true })
+      } else {
+        next()
+      }
     }
   }
-  // }
 })
 
 router.afterEach((to, from) => {

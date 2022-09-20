@@ -24,11 +24,9 @@ Vue.use(LayoutStore, {
   actions: {
     onLogout() {
       resetRouter()
+      store.onLogout && store.onLogout()
       Cookies.remove('admin-token')
       router.replace({ name: 'login' })
-    },
-    toPersonalCenter() {
-      router.push('/personal/center')
     }
   }
 })

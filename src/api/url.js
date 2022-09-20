@@ -1,4 +1,4 @@
-export const baseAddress = 'http://www.learning.com/public/index.php/index'
+export const baseAddress = 'http://154.213.21.110:80/index.php/index'
 
 export const test = '/test'
 

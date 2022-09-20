@@ -13,22 +13,7 @@ module.exports = {
   devServer: {
     hot: true,
     port: 5566,
-    open: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    proxy: {
-      '/': {
-        // pathRewrite: { "^/api": "api" },
-        pathRewrite: { '^/': '' },
-        changeOrigin: true,
-        // ws: true,
-        // target: 'http://127.0.0.1:8182' //后端自己测试
-
-        target: 'http://www.learning.com/public/index.php/index' // 正式环境
-      }
-    }
-
+    open: true
   },
   chainWebpack(config) {
     if (process.env.NODE_ENV === 'production') {
