@@ -88,7 +88,7 @@
           <!-- input输入框 -->
           <template v-else-if="i.type === 'input'">
             <el-input
-              v-if="i.isShow"
+              v-show="scope.row._isEdit"
               v-model="scope.row[`${tableColumConfig.prop}`]"
               class="x-table-input"
               :type="i.assemblyType || 'text'"
@@ -113,7 +113,7 @@
                 })
               "
             />
-            <span v-else>
+            <span v-show="!scope.row._isEdit">
               {{ scope.row[`${tableColumConfig.prop}`] }}
             </span>
           </template>

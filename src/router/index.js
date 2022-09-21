@@ -109,7 +109,7 @@ export const routes = [
       {
         path: '/numberMemoryTraining',
         name: 'numberMemoryTraining',
-        component: () => import('@/views/learningFun/numberMemoryTraining'),
+        component: () => import('@/views/learningFun/todayLearnWords'),
         meta: {
           title: '数字记忆训练',
           icon: 'el-icon-s-tools'

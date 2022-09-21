@@ -111,6 +111,16 @@
       @currentChanged="currentChanged"
       @onRefresh="getData"
     />
+
+    <!-- 导入组件-->
+    <import-win
+      :value="winExport"
+      title="单词导入"
+      :params="{}"
+      :upload-file-action="uploadFileAction"
+      @onCancel="winExport=false"
+      @success="success"
+    />
   </div>
 </template>
 
@@ -176,6 +186,7 @@ export default {
       setTimeout(() => {
         this.tableData = Array(20).fill({}).map((item, index) => {
           return {
+            _isEdit: false,
             rowIndex: index,
             word_id: ++index,
             checked: false,
@@ -210,6 +221,7 @@ export default {
     },
     modClick(data) {
       console.log(data, '开始编辑')
+      data.isShow = true
       if (data._columns.text === '编辑') {
         this.modFun(data)
       } else if (data._columns.text === '完成编辑') {
@@ -220,26 +232,29 @@ export default {
       }
     },
     modFun(data) {
-      data.columns.forEach((column, columnIndex) => {
-        // if (columnIndex === data.index) {
-
-        console.log(columnIndex, data.rowIndex, '==data.rowIndex')
-        if (column.template[0].type === 'input') {
-          this.$set(column.template[0], 'isShow', !column.template[0].isShow)
+      this.tableData.forEach((row, rowIndex) => {
+        if (rowIndex === data.rowIndex) {
+          row._isEdit = !row._isEdit
         }
 
-        if (column.template[0].text === '编辑') {
-          this.$set(column.template[0], 'text', '完成编辑')
-          this.$set(column.template[0], 'assemblyType', 'danger')
-        } else if (column.template[0].text === '完成编辑') {
-          this.$set(column.template[0], 'text', '编辑')
-          this.$set(column.template[0], 'assemblyType', 'primary')
-        }
+        // if (data._columns.text === '编辑' && row._isEdit) {
+        //   data._columns.text = '完成编辑'
+        //   data._columns.assemblyType = 'danger'
+        //   // this.$set(column.template[0], 'text', '完成编辑')
+        //   // this.$set(column.template[0], 'assemblyType', 'danger')
+        // } else if (data._columns.text === '完成编辑' && !row._isEdit) {
+        //   data._columns.text = '编辑'
+        //   data._columns.assemblyType = 'primary'
+        //   // this.$set(column.template[0], 'text', '编辑')
+        //   // this.$set(column.template[0], 'assemblyType', 'primary')
         // }
       })
     },
     deleteOne(data) {
-      console.log(data, '开始删除')
+      this.$showConfirmDialog('确定删除本条数据？').then(() => {
+        this.tableData.splice(data.rowIndex, 1)
+        this.$successMsg('删除成功！')
+      }).catch(() => { })
     },
     rowClick({ row, column, event }) {
       this.$set(row, 'checked', !row.checked)

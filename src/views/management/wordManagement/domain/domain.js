@@ -3,48 +3,42 @@ const domain = [
     label: 'ID',
     prop: 'word_id',
     template: [{
-      type: 'input',
-      isShow: false
+      type: 'input'
     }]
   },
   {
     label: '单词',
     prop: 'word',
     template: [{
-      type: 'input',
-      isShow: false
+      type: 'input'
     }]
   },
   {
     label: '释义',
     prop: 'paraphrase',
     template: [{
-      type: 'input',
-      isShow: false
+      type: 'input'
     }]
   },
   {
     label: '联想',
     prop: 'connect_in_the_mind',
     template: [{
-      type: 'input',
-      isShow: false
+      type: 'input'
     }]
   },
   {
     label: '单词备注',
     prop: 'group_id',
     template: [{
-      type: 'input',
-      isShow: false
+      type: 'input'
     }]
   },
   {
     label: '首次学习日期',
     prop: 'first_study_date',
     template: [{
-      type: 'input',
-      isShow: false
+      type: 'input'
     }]
   },
   {

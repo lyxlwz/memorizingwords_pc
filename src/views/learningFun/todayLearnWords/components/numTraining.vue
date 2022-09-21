@@ -1,11 +1,12 @@
-<!--  -->
 <template>
-  <div>数字记忆训练</div>
+  <div style="color:#fff">
+    记忆训练
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Index',
+  name: 'NumTraining',
   components: {},
   mixins: [],
   props: {},

@@ -14,6 +14,7 @@
       </el-col>
 
       <el-col
+        v-if="!numTraining"
         :span="8"
         :offset="isShowTodayWrods ? 8 : 16"
         class="flex justify-end"
@@ -60,39 +61,45 @@
         :offset="8"
       >
         <div class="padding margin-top-xl">
-          <div
-            v-if="!isShowTodayWrods"
-            class="flex align-center  flex-direction"
-          >
-            <div class="text-bold text-xxl">{{ $route.meta.title }}</div>
-            <div
-              class="word-info-bgcolor border-radius flex align-center justify-center"
-              style="width:50%; margin: 50px 0;"
-            >
-              <span class="padding text-bold text-xxl ">20</span>
-            </div>
-            <el-button
-              round
-              class="word-btn"
-              @click="changeTodayWrods(true)"
-            >开始筛查</el-button>
+          <div v-if="isTraining">
+            <num-training />
           </div>
 
           <div v-else>
-            <words
-              :word-obj="wordObj"
-              :check-mean="checkMean"
-            />
+            <div
+              v-if="!isShowTodayWrods"
+              class="flex align-center  flex-direction"
+            >
+              <div class="text-bold text-xxl">{{ $route.meta.title }}</div>
+              <div
+                class="word-info-bgcolor border-radius flex align-center justify-center"
+                style="width:50%; margin: 50px 0;"
+              >
+                <span class="padding text-bold text-xxl ">20</span>
+              </div>
+              <el-button
+                round
+                class="word-btn"
+                @click="changeTodayWrods(true,numTraining)"
+              >{{ numTraining ? '开始训练' : '开始筛查' }}</el-button>
+            </div>
 
-            <div class="flex justify-around margin-top-xl">
-              <el-button
-                round
-                class="word-btn"
-              >上一词</el-button>
-              <el-button
-                round
-                class="word-btn"
-              >下一词</el-button>
+            <div v-else>
+              <words
+                :word-obj="wordObj"
+                :check-mean="checkMean"
+              />
+
+              <div class="flex justify-around margin-top-xl">
+                <el-button
+                  round
+                  class="word-btn"
+                >上一词</el-button>
+                <el-button
+                  round
+                  class="word-btn"
+                >下一词</el-button>
+              </div>
             </div>
           </div>
         </div>
@@ -104,9 +111,10 @@
 <script>
 import saveRouteParams from '@/utils/saveRouteParams'
 import words from './components/words.vue'
+import NumTraining from './components/numTraining.vue'
 export default {
   name: 'Index',
-  components: { words },
+  components: { words, NumTraining },
   mixins: [],
   props: {},
   data() {
@@ -116,12 +124,16 @@ export default {
       showInpitMask: false,
       serchList: [],
       wordObj: {},
-      isShowTodayWrods: false
+      isShowTodayWrods: false,
+      isTraining: false
     }
   },
   computed: {
     checkMean() {
       return this.$route.name !== 'todayLearnWords'
+    },
+    numTraining() {
+      return this.$route.name === 'numberMemoryTraining'
     }
   },
   created() {
@@ -232,14 +244,18 @@ export default {
     },
     initData() {
       this.nowDate = new Date().toLocaleDateString()
-      const showTodayWrods = this.$route.name !== 'fallibleWordScreen' && this.$route.name !== 'randomWordScreen'
+      const showTodayWrods = this.$route.name !== 'fallibleWordScreen' && this.$route.name !== 'randomWordScreen' && this.$route.name !== 'numberMemoryTraining'
       this.changeTodayWrods(showTodayWrods)
 
       // this.researchPlanId = this.$route.params.id
       // this.researchPlanName = this.$route.params.name
     },
-    changeTodayWrods(val) {
-      this.isShowTodayWrods = val
+    changeTodayWrods(val, numTraining = false) {
+      if (numTraining) {
+        this.isTraining = numTraining
+      } else {
+        this.isShowTodayWrods = val
+      }
     }
   }
 }

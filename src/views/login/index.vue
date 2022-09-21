@@ -75,7 +75,6 @@ export default {
         this.$errorMsg('请输入密码')
         return
       }
-      // this.$router.push({ path: this.redirect || '/index/main' })
       this.$post({
         url: this.$urlPath.login,
         data: {
