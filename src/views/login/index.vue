@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 export default {
   name: 'Login',
   data() {
@@ -83,21 +84,14 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
+      }).then((res) => {
+        Cookies.set('x-token', res)
+        this.$store
+          .dispatch('user/saveUserInfo', { token: res })
+          .then((_) => {
+            this.$router.push({ path: this.redirect || '/index/main' })
+          })
       })
-        .then((res) => {
-          console.log(res, this, '==res')
-          this.$store
-            .dispatch('user/saveUserInfo', { token: res.data })
-            .then((_) => {
-              this.$router.push({ path: this.redirect || '/index/main' })
-            })
-            .catch((error) => {
-              this.$errorMsg(error.message || '登录失败，未知异常')
-            })
-        })
-        .catch((error) => {
-          this.$errorMsg(error.message || '登录失败，未知异常')
-        })
     }
   }
 }

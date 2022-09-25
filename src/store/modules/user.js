@@ -1,9 +1,12 @@
+import Vue from 'vue'
 import { resetRouter } from '@/router/index'
+import { getUserInfo } from '@/api/url'
 import Cookies from 'js-cookie'
 
 const userInfoString = localStorage.getItem('userInfo')
 const userInfo = JSON.parse(userInfoString || '{}')
 const state = {
+  userInfo: userInfo || {},
   userId: userInfo.userId || '',
   userName: userInfo.userName || '',
   userNickName: userInfo.userNickName || '',
@@ -26,18 +29,22 @@ const getters = {
   },
   getRoles(state) {
     return state.roles
+  },
+  getUserInfo(state) {
+    return state.userInfo
   }
 }
 
 const actions = {
   saveUserInfo({ commit }, userInfo) {
-    return new Promise((resolve, reject) => {
-      try {
-        commit('SAVE_USER_INFO', userInfo)
-        resolve()
-      } catch (error) {
-        reject(error)
+    Vue.prototype.$get({
+      url: getUserInfo,
+      data: {
+        date: new Date().format('yyyy-MM-dd')
       }
+    }).then((res) => {
+      const obj = { ...userInfo, ...res }
+      commit('SAVE_USER_INFO', obj)
     })
   },
   logout({ commit, dispatch }) {
@@ -62,8 +69,8 @@ const mutations = {
     state.roleId = userInfo.roleId
     state.roles = userInfo.roles
     state.token = userInfo.token
+    state.userInfo = userInfo
     localStorage.setItem('userInfo', JSON.stringify(userInfo))
-    Cookies.set('admin-token', userInfo.token)
   },
   LOGOUT(state) {
     // 这里只是在本地模拟删除了用户信息，在真实场景下需要 调后台登出接口 来真正实现登出功能
@@ -75,7 +82,7 @@ const mutations = {
     state.avatar = ''
     state.token = ''
     resetRouter()
-    Cookies.remove('admin-token')
+    Cookies.remove('x-token')
     localStorage.removeItem('userInfo')
   }
 }

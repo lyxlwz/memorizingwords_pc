@@ -62,7 +62,7 @@ Vue.prototype.$errorMsg = function (message = '') {
   Notification.error({
     message,
     type: 'error',
-    title: '提示消息',
+    title: '报错消息',
     duration: 8500
   })
 }

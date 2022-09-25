@@ -1378,3 +1378,11 @@ body .el-table__fixed::before {
 .word-input-mask-list {
   height: 80%;
 }
+
+.word-btn {
+  background: rgb(225, 227, 229, 0.15) !important;
+  color: #ddd !important;
+  font-weight: bold !important;
+  border: none !important;
+  width: 30% !important;
+}

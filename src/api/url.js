@@ -4,11 +4,11 @@ export const test = '/test'
 
 export const login = '/login/check'
 
-export const updateUserInfo = '/updateUser'
+export const getUserInfo = '/LearnPlan/learn_plan_search'
 
-export const addUserInfo = '/addUser'
+export const getAphorism = '/Aphorism/aphorism_search'
 
-export const getMenuListByRoleId = '/getMenuListByRoleId'
+export const getWordData = '/WordSystem/wordData'
 
 export const getAllMenuByRoleId = '/getAllMenuByRoleId'
 

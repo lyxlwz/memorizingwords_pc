@@ -20,17 +20,24 @@
         class="flex justify-end"
       >
         <el-input
-          v-model="serchVal"
+          v-model="searchVal"
           placeholder="搜索"
-          suffix-icon="el-icon-search"
-          style="z-index:9999;position: relative;width:80%"
+          style="z-index:1000;position: relative;width:80%"
           @focus="showInpitMask = true"
-        />
+          @keyup.enter.native="enterClick"
+        >
+          <i
+            slot="suffix"
+            class="el-input__icon el-icon-search"
+            @click="getSerchList"
+          ></i>
+        </el-input>
 
         <!-- 搜索蒙层 -->
         <MaskContent :show-mask.sync="showInpitMask">
           <transition>
             <div
+              v-show="isSerach"
               class="word-input-mask"
               style="width:22%"
             >
@@ -40,13 +47,14 @@
                 wrap-class="scrollbar-wrap-class"
               >
                 <div
-                  v-for="(word,index) in serchList"
+                  v-for="(item,index) in searchList"
                   :key="index"
+                  v-loading="serachLoading"
                   class="word-input-mask-item solids-bottom margin-tb-sm"
-                  @click="jumpLearnWords(word)"
+                  @click="jumpLearnWords(item)"
                 >
-                  <div class="word-name">{{ word.wordName }}</div>
-                  <div class="word-mean padding-tb-xs">{{ word.wordMean }}</div>
+                  <div class="word-name">{{ item.word }}</div>
+                  <div class="word-mean padding-tb-xs">{{ item.paraphrase }}</div>
                 </div>
               </el-scrollbar>
             </div>
@@ -62,7 +70,7 @@
       >
         <div class="padding margin-top-xl">
           <div v-if="isTraining">
-            <num-training />
+            <num-train />
           </div>
 
           <div v-else>
@@ -110,22 +118,24 @@
 
 <script>
 import saveRouteParams from '@/utils/saveRouteParams'
-import words from './components/words.vue'
-import NumTraining from './components/numTraining.vue'
+import words from './components/words/words.vue'
+import numTrain from './components/numTrain/index.vue'
 export default {
   name: 'Index',
-  components: { words, NumTraining },
+  components: { words, numTrain },
   mixins: [],
   props: {},
   data() {
     return {
-      serchVal: '',
+      searchVal: '',
       nowDate: '',
       showInpitMask: false,
-      serchList: [],
+      searchList: [],
       wordObj: {},
       isShowTodayWrods: false,
-      isTraining: false
+      isTraining: false,
+      isSearch: false,
+      serachLoading: false
     }
   },
   computed: {
@@ -148,80 +158,6 @@ export default {
 
   methods: {
     getData() {
-      this.serchList = [{
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }]
-
       this.wordObj = {
         wordName: 'resort',
         wordNature: '英',
@@ -256,17 +192,45 @@ export default {
       } else {
         this.isShowTodayWrods = val
       }
+    },
+    enterClick() {
+      this.getSerchList()
+    },
+    getSerchList() {
+      this.serachLoading = true
+      this.$get({
+        url: this.$urlPath.getWordData,
+        data: {
+          word: this.searchVal
+        }
+      }).then((res) => {
+        if (res.length === 0) {
+          this.$errorMsg('暂无该单词，请重新输入')
+        } else {
+          this.searchList = res
+          this.isSearch = true
+        }
+        this.serachLoading = false
+      }).catch((_) => {
+        this.serachLoading = false
+      })
+    },
+    jumpLearnWords(params) {
+      console.log(params, '===item')
+      this.$router.push({
+        name: 'todayLearnWords',
+        ...params
+        // params: {
+        //   id: this.questionsId,
+        //   name: this.name,
+        //   isPushStats,
+        //   isPause,
+        // },
+      })
     }
   }
 }
 
 </script>
 <style lang='scss' scoped>
-.word-btn {
-  background: rgb(225, 227, 229, 0.15);
-  color: #ddd;
-  font-weight: bold;
-  border: none;
-  width: 30%;
-}
 </style>

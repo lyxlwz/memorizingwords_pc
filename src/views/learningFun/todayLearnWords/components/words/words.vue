@@ -171,13 +171,13 @@ export default {
     }
   }
 
-  &-btn {
-    background: rgb(225, 227, 229, 0.15);
-    color: #ddd;
-    font-weight: bold;
-    border: none;
-    width: 30%;
-  }
+  // &-btn {
+  //   background: rgb(225, 227, 229, 0.15);
+  //   color: #ddd;
+  //   font-weight: bold;
+  //   border: none;
+  //   width: 30%;
+  // }
 }
 .word-dashed-bottom {
   border-bottom: 2px dashed #ddd;

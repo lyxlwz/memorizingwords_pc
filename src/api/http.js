@@ -1,15 +1,28 @@
 import Vue from 'vue'
 import request from './axios.config'
+import { Notification } from 'element-ui'
 
 Vue.prototype.$http = function ({ url, data, method = 'GET', headers, beforeRequest, afterRequest }) {
   const successHandler = res => {
     if (res.code === 200) {
-      return res
+      return res.data
     }
+    Notification.error({
+      message: res.msg || '请求失败，未知异常',
+      type: 'error',
+      title: '报错消息',
+      duration: 8500
+    })
     throw new Error(res.msg || '请求失败，未知异常')
   }
   const failHandler = error => {
     afterRequest && afterRequest()
+    Notification.error({
+      message: error.msg || '请求失败，未知异常',
+      type: 'error',
+      title: '报错消息',
+      duration: 8500
+    })
     throw new Error(error.msg || '请求失败，未知异常')
   }
   beforeRequest && beforeRequest()

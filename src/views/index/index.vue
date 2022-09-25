@@ -1,32 +1,41 @@
 <template>
   <div class="main-container padding-lr-xl">
     <div class="flex justify-end margin-tb-sm">
-      <!--       style="position: relative" -->
       <el-input
-        v-model="serchVal"
+        v-model="searchVal"
         placeholder="搜索"
-        suffix-icon="el-icon-search"
-        style="width:40%;z-index:9999;position: relative"
+        style="width:40%;z-index:1000;position: relative"
         @focus="showInpitMask = true"
-      />
+        @keyup.enter.native="enterClick"
+      >
+        <i
+          slot="suffix"
+          class="el-input__icon el-icon-search"
+          @click="getSerchList"
+        ></i>
+      </el-input>
 
       <!-- 搜索蒙层 -->
       <MaskContent :show-mask.sync="showInpitMask">
         <transition>
-          <div class="word-input-mask">
+          <div
+            v-show="isSerach"
+            class="word-input-mask"
+          >
             <div class="word-input-mask-title text-bold">查询结果</div>
             <el-scrollbar
               class="scrollbar word-input-mask-list"
               wrap-class="scrollbar-wrap-class"
             >
               <div
-                v-for="(word,index) in serchList"
+                v-for="(item,index) in searchList"
                 :key="index"
+                v-loading="serachLoading"
                 class="word-input-mask-list-item solids-bottom margin-tb-sm"
-                @click="jumpLearnWords(word)"
+                @click="jumpLearnWords(item)"
               >
-                <div class="word-name">{{ word.wordName }}</div>
-                <div class="word-mean padding-tb-xs">{{ word.wordMean }}</div>
+                <div class="word-name">{{ item.word }}</div>
+                <div class="word-mean padding-tb-xs">{{ item.paraphrase }}</div>
               </div>
             </el-scrollbar>
           </div>
@@ -71,14 +80,14 @@
             class="margin-top-sm word-text-color text-xxl"
             style="line-height:60px;"
           >
-            {{ proverbs.message }}
+            {{ proverbs.aphorism }}
           </div>
         </div>
         <div>
           <img
-            :src="require('@/assets/word/index.png')"
+            :src="proverbs.picture"
             alt=""
-            style="width:300px;height:300px;"
+            style="width:230px;height:230px;border-radius: 50%;"
           />
         </div>
       </div>
@@ -88,21 +97,25 @@
 
 <script>
 import ResizeMixin from '@/mixins/ResizeMixin'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Main',
-  components: {
-  },
   mixins: [ResizeMixin],
   data() {
     return {
       dataList: [],
-      serchVal: '',
+      searchVal: '',
       showInpitMask: false,
       proverbs: {},
-      serchList: []
+      searchList: [],
+      isSearch: false,
+      serachLoading: false
     }
   },
   computed: {
+    ...mapGetters({
+      userInfo: 'user/getUserInfo'
+    }),
     collapse() {
       return this.$layoutStore.state.isCollapse
     }
@@ -115,115 +128,66 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.getDataList()
+    this.getProverbs()
   },
   methods: {
     onResize(width) {
 
     },
-    getData() {
+    getDataList() {
       this.dataList = [
         {
           backgroundColor: 'rgb(250, 112, 139',
           title: '今日待学单词',
-          number: '201'
+          number: this.userInfo.today_word_target
         },
         {
           backgroundColor: 'rgb(56, 172, 245)',
           title: '累积学习单词',
-          number: '9000'
+          number: this.userInfo.cumulative_learn_words
         },
         {
           backgroundColor: 'rgb(142, 107, 235)',
           title: '目标学习单词',
-          number: '20000'
+          number: this.userInfo.word_target
         },
         {
           backgroundColor: 'rgb(63, 200, 169)',
           title: '剩余未学单词',
-          number: '11000'
+          number: this.userInfo.remaining_unlearned_words
         }
       ]
-
-      this.proverbs = {
-        title: '箴言',
-        message: '人的一生中应该有三个爱好，一个帮助你赚钱，一个管理身材，一个帮助你探索世界'
-        // imgUrl:''
-      }
-
-      this.serchList = [{
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'word',
-        wordMean: 'n.单词'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }, {
-        wordName: 'public',
-        wordMean: 'n.公众，公共'
-      }, {
-        wordName: 'test',
-        wordMean: 'n.测试'
-      }]
+    },
+    getProverbs() {
+      this.$get({ url: this.$urlPath.getAphorism }).then((res) => {
+        this.proverbs = {
+          title: '箴言',
+          ...res
+        }
+      })
+    },
+    enterClick() {
+      this.getSerchList()
+    },
+    getSerchList() {
+      this.serachLoading = true
+      this.$get({
+        url: this.$urlPath.getWordData,
+        data: {
+          word: this.searchVal
+        }
+      }).then((res) => {
+        if (res.length === 0) {
+          this.$errorMsg('暂无该单词，请重新输入')
+        } else {
+          this.searchList = res
+          this.isSearch = true
+        }
+        this.serachLoading = false
+      }).catch((_) => {
+        this.serachLoading = false
+      })
     },
     jumpLearnWords(params) {
       console.log(params, '===item')

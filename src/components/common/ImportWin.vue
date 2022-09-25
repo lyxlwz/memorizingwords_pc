@@ -115,7 +115,7 @@ export default {
     }
   },
   data() {
-    const token = Cookies.get('admin-token')
+    const token = Cookies.get('x-token')
     return {
       bigloading: null,
       loading: false,

@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import qs from 'qs'
+import Cookies from 'js-cookie'
 
 const baseIp = 'http://154.213.21.110:80/index.php/index'
 
@@ -26,9 +27,10 @@ service.interceptors.request.use(
     if (config.headers[CONTENT_TYPE] === FORM_URLENCODED) {
       config.data = qs.stringify(config.data)
     }
-    // if (user.getToken()) {
-    //   config.headers['Authorization'] = 'token_' + user.getToken()
-    // }
+    const token = Cookies.get('x-token')
+    if (token && token !== null) {
+      config.headers['x-token'] = `${token}`
+    }
     return config
   },
   error => {

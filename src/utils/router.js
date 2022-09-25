@@ -62,7 +62,7 @@ function generatorRoutes(res) {
 }
 
 function isTokenExpired() {
-  const token = Cookies.get('admin-token')
+  const token = Cookies.get('x-token')
   return !!token
 }
 
@@ -90,8 +90,8 @@ router.beforeEach((to, from, next) => {
         })
         LayoutStore.initPermissionRoute([...constantRoutes, ...accessRoutes])
         router.addRoutes(accessRoutes)
-        localStorage.setItem('router', [...constantRoutes, ...accessRoutes])
-        Cookies.set('router', [...constantRoutes, ...accessRoutes])
+        localStorage.setItem('router', JSON.stringify([...constantRoutes, ...accessRoutes]))
+        Cookies.set('router', JSON.stringify([...constantRoutes, ...accessRoutes]))
         menuStore.setDefaultOpeneds([...constantRoutes, ...accessRoutes])
 
         next({ ...to, replace: true })
