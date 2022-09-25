@@ -73,7 +73,7 @@ export const routes = [
       {
         path: '/todayLearnWords',
         name: 'todayLearnWords',
-        component: () => import('@/views/learningFun/todayLearnWords'),
+        component: () => import('@/views/learningFun'),
         meta: {
           title: '今日学习单词',
           icon: 'el-icon-s-tools'
@@ -82,7 +82,7 @@ export const routes = [
       {
         path: '/todayScreenWords',
         name: 'todayScreenWords',
-        component: () => import('@/views/learningFun/todayLearnWords'),
+        component: () => import('@/views/learningFun'),
         meta: {
           title: '今日单词筛查',
           icon: 'el-icon-s-tools'
@@ -91,7 +91,7 @@ export const routes = [
       {
         path: '/fallibleWordScreen',
         name: 'fallibleWordScreen',
-        component: () => import('@/views/learningFun/todayLearnWords'),
+        component: () => import('@/views/learningFun'),
         meta: {
           title: '易错单词筛查',
           icon: 'el-icon-s-tools'
@@ -100,7 +100,7 @@ export const routes = [
       {
         path: '/randomWordScreen',
         name: 'randomWordScreen',
-        component: () => import('@/views/learningFun/todayLearnWords'),
+        component: () => import('@/views/learningFun'),
         meta: {
           title: '随机单词筛查',
           icon: 'el-icon-s-tools'
@@ -109,7 +109,7 @@ export const routes = [
       {
         path: '/numberMemoryTraining',
         name: 'numberMemoryTraining',
-        component: () => import('@/views/learningFun/todayLearnWords'),
+        component: () => import('@/views/learningFun'),
         meta: {
           title: '数字记忆训练',
           icon: 'el-icon-s-tools'
