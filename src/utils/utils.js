@@ -74,6 +74,7 @@ export const clickDateDiff = function (value) {
  */
 // 时间戳转换为时间 format('yyyy-MM-dd hh:mm:ss')
 // 时间格式转换
+// eslint-disable-next-line no-extend-native
 Date.prototype.format = function (fmt = 'yyyy-MM-dd hh:mm:ss') { // author: meizz
   var o = {
     'M+': this.getMonth() + 1, // 月份
