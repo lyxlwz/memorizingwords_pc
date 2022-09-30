@@ -10,9 +10,9 @@ export const getAphorism = '/Aphorism/aphorism_search'
 
 export const getWordData = '/WordSystem/wordData'
 
-export const getAllMenuByRoleId = '/getAllMenuByRoleId'
+export const getTodayWord = '/WordLearn/todayWordScreening'
 
-export const deleteUserById = '/deleteUserById'
+export const getNumberTraining = '/MemoryTraining/numberMemoryTraining'
 
 export const getDepartmentList = '/getDepartmentList'
 

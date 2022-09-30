@@ -8,14 +8,14 @@
       <span>请记住以下数字</span>
       <span>
         <i class="el-icon-timer margin-right-xs"></i>
-        <span>00:13:11''26</span>
+        <span>{{ time_spent }}</span>
       </span>
     </div>
 
     <random-box
       ref="randomBox"
       :remember="remember"
-      :random-number="datas.random_number"
+      :random-number="number"
     />
 
     <div class="flex justify-center num-btn">
@@ -42,37 +42,30 @@ export default {
   name: 'Process',
   components: { randomBox },
   mixins: [],
-  props: {},
+  props: {
+    number: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       datas: {},
-      remember: false
+      remember: false,
+      time_spent: '01:02:100'
     }
   },
 
   computed: {},
 
   created() {
-    this.getData()
+
   },
 
   methods: {
-    getData() {
-      const data = {
-        'id': 11,
-        'date': '16:45:42.000000',
-        'random_number': '31814410535809040085',
-        'upload_number': null,
-        'amount_error': null,
-        'accuracy': null,
-        'digital_number': 20,
-        'time_spent': null
-      }
-      this.datas = data
-    },
     submit() {
-      this.datas.upload_number = this.$refs.randomBox.numList.join('')
-      this.$emit('submit', true)
+      const upload_number = this.$refs.randomBox.numList.join('')
+      this.$emit('submit', { isResults: true, upload_number, time_spent: this.time_spent })
     }
   }
 }

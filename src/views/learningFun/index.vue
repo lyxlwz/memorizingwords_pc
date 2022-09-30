@@ -84,7 +84,11 @@
       >
         <div class="padding margin-top-xl">
           <div v-if="isTraining">
-            <num-train />
+            <num-train
+              :id="id"
+              :date="date"
+              :number="number"
+            />
           </div>
 
           <div v-else>
@@ -134,6 +138,7 @@
 import saveRouteParams from '@/utils/saveRouteParams'
 import words from './components/words/words.vue'
 import numTrain from './components/numTrain/index.vue'
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'Index',
   components: { words, numTrain },
@@ -156,11 +161,13 @@ export default {
       serachLoading: false,
       last_page: 1,
 
-      wordId: '',
-      wordList: []
+      id: '',
+      date: '',
+      number: ''
     }
   },
   computed: {
+    ...mapState(['wordList', 'wordId']),
     checkMean() {
       return this.$route.name !== 'todayLearnWords'
     },
@@ -183,8 +190,8 @@ export default {
 
     this.getData()
   },
-
   methods: {
+    ...mapMutations(['setWordList', 'setWordId']),
     getData() {
       this.$get({
         url: this.$urlPath.getTodayWord,
@@ -192,7 +199,7 @@ export default {
           date: this.nowDate
         }
       }).then((res) => {
-        console.log(res, 55555555)
+        // this.
         // if (res.data.length === 0 && res.current_page === 1) {
         //   this.$errorMsg('暂无该单词，请重新输入')
         // } else {
@@ -225,7 +232,7 @@ export default {
       // }
     },
     initData() {
-      this.nowDate = new Date().toLocaleDateString()
+      this.nowDate = new Date().format('yyyy-MM-dd')
       const showTodayWrods = this.$route.name !== 'fallibleWordScreen' && this.$route.name !== 'randomWordScreen' && this.$route.name !== 'numberMemoryTraining'
       this.changeTodayWrods(showTodayWrods)
 
@@ -235,6 +242,7 @@ export default {
     changeTodayWrods(val, numTraining = false) {
       if (numTraining) {
         this.isTraining = numTraining
+        this.toTrainNum()
       } else {
         this.isShowTodayWrods = val
       }
@@ -282,6 +290,19 @@ export default {
         //   isPushStats,
         //   isPause,
         // },
+      })
+    },
+    toTrainNum() {
+      this.$get({
+        url: this.$urlPath.getNumberTraining,
+        data: {
+          digital_number: '20'
+        }
+      }).then((res) => {
+        console.log('666666666', res)
+        this.id = res.id
+        this.date = res.date
+        this.number = res.random_number
       })
     }
   }

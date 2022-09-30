@@ -3,6 +3,7 @@
     <train-results v-if="isResults" />
     <train-process
       v-else
+      :number="number"
       @submit="submit"
     />
 
@@ -16,7 +17,20 @@ export default {
   name: 'Index',
   components: { trainProcess, trainResults },
   mixins: [],
-  props: {},
+  props: {
+    id: {
+      type: Number,
+      default: 0
+    },
+    date: {
+      type: String,
+      default: ''
+    },
+    number: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       isResults: false
@@ -31,7 +45,18 @@ export default {
 
   methods: {
     submit(val) {
-      this.isResults = val
+      console.log(val, 55555555)
+      this.isResults = val.isResults
+      this.$get({
+        url: this.$urlPath.getNumberTraining,
+        data: {
+          id: this.id,
+          upload_number: val.upload_number,
+          time_spent: val.time_spent
+        }
+      }).then((res) => {
+        console.log('666666666', res)
+      })
     }
   }
 }
