@@ -15,7 +15,7 @@
     <random-box
       ref="randomBox"
       :remember="remember"
-      :random-number="number"
+      :random-number="trainNumData.random_number"
     />
 
     <div class="flex justify-center num-btn">
@@ -38,28 +38,37 @@
 
 <script>
 import randomBox from './randomBox'
+import { handleTime } from '@/utils/utils'
 export default {
   name: 'Process',
   components: { randomBox },
   mixins: [],
   props: {
-    number: {
-      type: String,
-      default: ''
+    trainNumData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
     return {
       datas: {},
       remember: false,
-      time_spent: '01:02:100'
+      time_spent: '',
+      timer: null
     }
   },
 
   computed: {},
 
   created() {
-
+    const before = new Date().getTime()
+    this.timer = setInterval(() => {
+      const now = new Date().getTime()
+      const time = now - before
+      this.time_spent = handleTime(time, false)
+    }, 1000 / 60)
   },
 
   methods: {

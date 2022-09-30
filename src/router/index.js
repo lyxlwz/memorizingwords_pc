@@ -80,13 +80,24 @@ export const routes = [
         }
       },
       {
+        path: '/serachWord',
+        name: 'serachWord',
+        component: () => import('@/views/management/serachWord'),
+        meta: {
+          title: '搜索单词',
+          icon: 'el-icon-s-tools'
+        },
+        hidden: true
+      },
+      {
         path: '/todayScreenWords',
         name: 'todayScreenWords',
         component: () => import('@/views/learningFun'),
         meta: {
           title: '今日单词筛查',
           icon: 'el-icon-s-tools'
-        }
+        },
+        hidden: true
       },
       {
         path: '/fallibleWordScreen',

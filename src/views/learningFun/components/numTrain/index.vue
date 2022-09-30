@@ -1,9 +1,12 @@
 <template>
   <div class="text-white">
-    <train-results v-if="isResults" />
+    <train-results
+      v-if="isResults"
+      :num-results-data="numResultsObj"
+    />
     <train-process
       v-else
-      :number="number"
+      :train-num-data="trainNumData"
       @submit="submit"
     />
 
@@ -18,22 +21,17 @@ export default {
   components: { trainProcess, trainResults },
   mixins: [],
   props: {
-    id: {
-      type: Number,
-      default: 0
-    },
-    date: {
-      type: String,
-      default: ''
-    },
-    number: {
-      type: String,
-      default: ''
+    trainNumData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
     return {
-      isResults: false
+      isResults: false,
+      numResultsObj: {}
     }
   },
 
@@ -45,17 +43,16 @@ export default {
 
   methods: {
     submit(val) {
-      console.log(val, 55555555)
       this.isResults = val.isResults
       this.$get({
         url: this.$urlPath.getNumberTraining,
         data: {
-          id: this.id,
+          id: this.trainNumData.id,
           upload_number: val.upload_number,
           time_spent: val.time_spent
         }
       }).then((res) => {
-        console.log('666666666', res)
+        this.numResultsObj = res
       })
     }
   }

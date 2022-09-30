@@ -6,7 +6,7 @@
         :span="8"
         class="text-xl text-bold"
       >
-        <div>学习日期：{{ nowDate }}</div>
+        <div>学习日期：{{ wordObj.study_date }}</div>
         <div class="margin-top-lg">
           <div>分组序号</div>
           <div class="margin-top">单词学习</div>
@@ -84,11 +84,7 @@
       >
         <div class="padding margin-top-xl">
           <div v-if="isTraining">
-            <num-train
-              :id="id"
-              :date="date"
-              :number="number"
-            />
+            <num-train :train-num-data="numTrainObj" />
           </div>
 
           <div v-else>
@@ -98,10 +94,11 @@
             >
               <div class="text-bold text-xxl">{{ $route.meta.title }}</div>
               <div
-                class="word-info-bgcolor border-radius flex align-center justify-center"
-                style="width:50%; margin: 50px 0;"
+                class="word-info-bgcolor border-radius flex align-center justify-center inputVal"
+                style="width:50%; margin: 50px 0; "
               >
-                <span class="padding text-bold text-xxl ">20</span>
+                <!-- <span class="padding text-bold text-xxl ">20</span> -->
+                <el-input v-model="inputVal" />
               </div>
               <el-button
                 round
@@ -112,6 +109,7 @@
 
             <div v-else>
               <words
+                ref="words"
                 :word-obj="wordObj"
                 :check-mean="checkMean"
               />
@@ -120,11 +118,14 @@
                 <el-button
                   round
                   class="word-btn"
-                >上一词</el-button>
+                  @click="lastWord"
+                >{{ firstLoad ? '不记得' : '上一词' }}</el-button>
                 <el-button
                   round
                   class="word-btn"
-                >下一词</el-button>
+                  @click="nextWord"
+                >
+                  {{ lastLoad ? '开始筛查' :'下一词' }}</el-button>
               </div>
             </div>
           </div>
@@ -135,10 +136,9 @@
 </template>
 
 <script>
-import saveRouteParams from '@/utils/saveRouteParams'
 import words from './components/words/words.vue'
 import numTrain from './components/numTrain/index.vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Index',
   components: { words, numTrain },
@@ -160,14 +160,18 @@ export default {
       },
       serachLoading: false,
       last_page: 1,
-
-      id: '',
-      date: '',
-      number: ''
+      firstLoad: false,
+      lastLoad: false,
+      screenType: 1,
+      inputVal: '20',
+      numTrainObj: {}
     }
   },
   computed: {
-    ...mapState(['wordList', 'wordId']),
+    ...mapGetters({
+      wordList: 'word/getWordList',
+      wordId: 'word/getWordId'
+    }),
     checkMean() {
       return this.$route.name !== 'todayLearnWords'
     },
@@ -182,62 +186,90 @@ export default {
     }
   },
   created() {
-    const that = this
-    saveRouteParams(that)
-    console.log(this.$route, this.$store, this.$route.params, '----99999999999')
-
     this.initData()
-
-    this.getData()
   },
   methods: {
-    ...mapMutations(['setWordList', 'setWordId']),
-    getData() {
+    ...mapMutations({
+      setWordList: 'word/setWordList',
+      setWordId: 'word/setWordId'
+    }),
+    getTodayLearnWords() {
       this.$get({
         url: this.$urlPath.getTodayWord,
         data: {
           date: this.nowDate
         }
       }).then((res) => {
-        // this.
-        // if (res.data.length === 0 && res.current_page === 1) {
-        //   this.$errorMsg('暂无该单词，请重新输入')
-        // } else {
-        //   this.last_page = res.last_page
-        //   this.searchList.push(...res.data)
-        //   this.isSearch = true
-        // }
-        // this.serachLoading = false
-      }).catch((_) => {
-        this.serachLoading = false
+        this.setWordList(res.temp_word_list)
+        this.setWordId(res.temp_word_list[0])
+        this.getWord(this.wordId)
       })
-      // this.wordObj = {
-      //   wordName: 'resort',
-      //   wordNature: '英',
-      //   wordLink: 'https://tts.youdao.com/fanyivoice?word=word.mp3',
-      //   phoneticSymbol: '/ rɪˈzɔːrt /',
-      //   wordsMean: [
-      //     {
-      //       wordType: 'n.',
-      //       wordMean: '度假胜地 采用的方法'
-      //     },
-      //     {
-      //       wordType: 'vi.',
-      //       wordMean: '诉诸，采取'
-      //     }
-      //   ],
-      //   wordAssociate: '<p>热（<span style="color: rgb(225, 60, 57);">re</span>）瘦（<span style="color: rgb(225, 60, 57);">s</span>）的鸡蛋（<span style="color: rgb(225, 60, 57);">o</span>）热（<span style="color: rgb(225, 60, 57);">r</span>）的头（<span style="color: rgb(225, 60, 57);">t</span>）疼</p><p></p>',
-      //   wordExampleLink: 'https://tts.youdao.com/fanyivoice?word=example.mp3',
-      //   wordExample: '<p>This place is just so charming, the perfect <span style="background-color: transparent;">winter resort.</span></p><p>这个地方实在是太好啦，完美的冬季旅游胜地！</p>'
-      // }
+    },
+    getRandomWordScreen() {
+      this.$get({
+        url: this.$urlPath.getRandomWordScreening,
+        data: {
+          count: this.inputVal
+        }
+      }).then((res) => {
+        this.setWordList(res.temp_word_list)
+        this.setWordId(res.temp_word_list[0])
+        this.getWord(this.wordId)
+      })
+    },
+    getFallibleWordScreen() {
+      this.$get({
+        url: this.$urlPath.getErrorWordScreening,
+        data: {
+          count: this.inputVal
+        }
+      }).then((res) => {
+        this.setWordList(res.temp_word_list)
+        this.setWordId(res.temp_word_list[0])
+        this.getWord(this.wordId)
+      })
+    },
+    getScreenWords(data) {
+      this.$get({
+        url: this.$urlPath.getWordScreening,
+        data
+      }).then((res) => {
+        console.log(res, 555)
+        // this.setWordList(res.temp_word_list)
+        // this.setWordId(res.temp_word_list[0])
+        // this.getWord(this.wordId)
+      })
+    },
+    getWord(word_id) {
+      this.firstLoad = this.wordList[0] === this.wordId
+      this.lastLoad = this.wordId === this.wordList[this.wordList.length - 1]
+      this.$get({
+        url: this.$urlPath.getWord,
+        data: { word_id }
+      }).then((res) => {
+        this.wordObj = res
+        this.wordObj.word_voice = `${this.$urlPath.wordVoiceUrl}${res.word_voice}`
+      })
     },
     initData() {
       this.nowDate = new Date().format('yyyy-MM-dd')
       const showTodayWrods = this.$route.name !== 'fallibleWordScreen' && this.$route.name !== 'randomWordScreen' && this.$route.name !== 'numberMemoryTraining'
       this.changeTodayWrods(showTodayWrods)
 
-      // this.researchPlanId = this.$route.params.id
-      // this.researchPlanName = this.$route.params.name
+      switch (this.$route.name) {
+        case 'todayLearnWords':
+          this.screenType = 1
+          this.getTodayLearnWords()
+          break
+        case 'randomWordScreen':
+          this.screenType = 2
+          break
+        case 'fallibleWordScreen':
+          this.screenType = 3
+          break
+        default:
+          break
+      }
     },
     changeTodayWrods(val, numTraining = false) {
       if (numTraining) {
@@ -245,6 +277,11 @@ export default {
         this.toTrainNum()
       } else {
         this.isShowTodayWrods = val
+        if (this.screenType === 2) {
+          this.getRandomWordScreen()
+        } else if (this.screenType === 3) {
+          this.getFallibleWordScreen()
+        }
       }
     },
     enterClick() {
@@ -257,7 +294,7 @@ export default {
     getSerchList() {
       this.serachLoading = true
       this.$get({
-        url: this.$urlPath.getWordData,
+        url: this.$urlPath.getWord,
         data: {
           word: this.searchVal,
           ...this.queryData
@@ -279,17 +316,61 @@ export default {
       this.queryData.page += 1
       this.getSerchList()
     },
+    lastWord() {
+      if (this.firstLoad) {
+        this.getScreenWords({
+          type: this.screenType,
+          word_id: this.wordId,
+          error_count: 1,
+          date: this.nowDate
+        })
+      } else {
+        const length = this.wordList.length
+        const index = this.wordList.findIndex(v => v === this.wordId)
+        const wordId = index === 0 ? this.wordList[length - 1] : this.wordList[index - 1]
+        this.toNewWord(wordId)
+      }
+    },
+    nextWord() {
+      if (this.lastLoad) {
+        this.getScreenWords({
+          type: this.screenType,
+          word_id: this.wordId,
+          error_count: 0,
+          date: this.nowDate
+        })
+      } else {
+        const length = this.wordList.length
+        const index = this.wordList.findIndex(v => v === this.wordId)
+        const wordId = index === length - 1 ? this.wordList[0] : this.wordList[index + 1]
+        this.toNewWord(wordId)
+      }
+    },
+    toNewWord(wordId) {
+      if (this.$refs.words.isEditorword || this.$refs.words.isEditorAssociate) {
+        this.$get({
+          url: this.$urlPath.updateWord,
+          data: {
+            wordid: this.wordObj.id,
+            word: this.wordObj.word,
+            connect_in_the_mind: this.wordObj.connect_in_the_mind
+          }
+        }).then((res) => {
+          // todo
+          console.log(res, 55555555)
+        })
+      } else {
+        this.setWordId(wordId)
+        this.getWord(wordId)
+      }
+    },
     jumpLearnWords(params) {
       console.log(params, '===item')
       this.$router.push({
-        name: 'todayLearnWords',
-        ...params
-        // params: {
-        //   id: this.questionsId,
-        //   name: this.name,
-        //   isPushStats,
-        //   isPause,
-        // },
+        name: 'serachWord',
+        params: {
+          id: params.id
+        }
       })
     },
     toTrainNum() {
@@ -300,9 +381,7 @@ export default {
         }
       }).then((res) => {
         console.log('666666666', res)
-        this.id = res.id
-        this.date = res.date
-        this.number = res.random_number
+        this.numTrainObj = res
       })
     }
   }
@@ -310,4 +389,16 @@ export default {
 
 </script>
 <style lang='scss' scoped>
+.inputVal {
+  ::v-deep .el-input__inner {
+    background-color: #506cff !important;
+    color: #fff !important;
+    border: none !important;
+    height: 70px !important;
+    line-height: 70px !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+}
 </style>

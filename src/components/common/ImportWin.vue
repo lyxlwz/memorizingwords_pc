@@ -124,8 +124,7 @@ export default {
       fileName: '',
       showExcelUpload: true,
       headers: {
-        'Blade-Auth': `bearer ${token}`,
-        Authorization: `Basic c2FiZXI6c2FiZXJfc2VjcmV0`
+        'x-token': `${token}`
       },
       posData: {},
 
@@ -137,21 +136,11 @@ export default {
     params() {
       // 如果传入的参数发生变化
       this.initPostData()
-      // this.posData = {
-      //     ...this.params,
-      //     bid: this.bid,
-      //     sessionId: StorageUtils.getSessionItem("sessionId")
-      // };
     },
 
     va() {
       // 如果传入的参数发生变化
       this.initPostData()
-      // this.posData = {
-      //     ...this.params,
-      //     bid: this.bid,
-      //     sessionId: StorageUtils.getSessionItem("sessionId")
-      // };
     }
     // 如果为true  则弹出窗口 如果为false 则关闭窗口
 

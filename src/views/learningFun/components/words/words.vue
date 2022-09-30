@@ -1,21 +1,29 @@
 <template>
   <div>
-    <div>
-      <span class="word-name text-bold">{{ wordObj.wordName }}</span>
-      <el-input v-model="wordObj.wordName" />
+    <div @dblclick="isEditorword = true">
+      <span
+        v-if="!isEditorword"
+        class="word-name text-bold"
+      >{{ wordObj.word }}</span>
+      <el-input
+        v-else
+        v-model="wordObj.word"
+      />
     </div>
     <div class="margin-top flex">
-      <span class="border-radius padding-xs word-info-bgcolor text-xs flex">
-        <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
+      <span
+        class="border-radius padding-xs word-info-bgcolor text-sm flex justify-around"
+        style="width:60px;"
+      >
+        <span class="margin-right-xs">英</span>
         <play-words
           ref="wordLink"
-          :audio-link="wordObj.wordLink"
+          :audio-link="wordObj.word_voice"
           play-id="wordLink"
           :is-play.sync="wordIsPlay"
           @beforePlay="beforWordPlay"
         />
       </span>
-      <span class="word-text-info-color margin-left-xs">{{ wordObj.phoneticSymbol }}</span>
     </div>
 
     <div
@@ -30,25 +38,18 @@
     </div>
 
     <div v-else>
-      <div
-        v-for="(item,index) in wordObj.wordsMean"
-        :key="index"
-        class="margin-top-lg text-lg"
-      >
-        <div>
-          <span class="word-text-info-color">{{ item.wordType }}</span>
-          <span class="margin-left-xs">
-            <span class="word-dashed-bottom">{{ item.wordMean }}</span>
-            <!-- <span class="word-dashed-bottom margin-left-xs">采用的方法</span> -->
-          </span>
-        </div>
+      <div class="margin-top-lg text-lg">
+        <span class="word-text-info-color">{{ wordObj.paraphrase }}</span>
       </div>
 
       <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area">
-        <div v-html="wordObj.wordAssociate"></div>
+        <div
+          class="margin-bottom"
+          v-html="wordObj.connect_in_the_mind"
+        ></div>
         <RichTextEditor
           v-if="isEditorAssociate"
-          v-model="wordObj.wordAssociate"
+          v-model="wordObj.connect_in_the_mind"
           class="word-area-btn rich-text-editor"
         />
         <div
@@ -59,33 +60,13 @@
         </div>
       </div>
 
-      <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area flex">
-        <div class="text-xs">
-          <div class="border-radius word-info-bgcolor padding-xs flex">
-            <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
-            <play-words
-              ref="wordExampleLink"
-              :audio-link="wordObj.wordExampleLink"
-              play-id="wordExampleLink"
-              :is-play.sync="exampleIsPlay"
-              @beforePlay="beforeExamplePlay"
-            />
-          </div>
-        </div>
-        <div class="margin-left-sm">
-          <div v-html="wordObj.wordExample"></div>
-          <RichTextEditor
-            v-if="isEditorExample"
-            v-model="wordObj.wordExample"
-            :height="100"
-            class="word-area-btn rich-text-editor"
-          />
-          <div
-            class="text-right margin-top"
-            @dblclick="isEditorExample = true"
-          >
-            <span class="text-center border-radius word-area-btn text-sm">例句</span>
-          </div>
+      <div class="margin-top-xl border-radius padding-lg word-text-info-color word-area">
+        <div>{{ wordObj.example }}</div>
+        <div
+          class="text-right margin-top"
+          style="width:100%"
+        >
+          <span class="text-center border-radius word-area-btn text-sm">例句</span>
         </div>
       </div>
     </div>
@@ -122,9 +103,9 @@ export default {
     return {
       wordIsPlay: false,
       exampleIsPlay: false,
-      wordIds: ['wordLink', 'wordExampleLink'],
+      wordIds: ['wordLink'],
       isEditorAssociate: false,
-      isEditorExample: false
+      isEditorword: false
     }
   },
 
@@ -171,6 +152,7 @@ export default {
     .rich-text-editor {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
+      font-size: 16px;
     }
   }
 

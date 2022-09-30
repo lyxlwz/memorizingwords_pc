@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="border-radius accTraining padding text-bold">
-      <div class="word-text-light-color text-sm">数字训练准确率<span>10%</span></div>
-      <div class="text-xl margin-top-xs">01:13''12</div>
+      <div class="word-text-light-color text-sm">数字训练准确率<span>{{ numResultsData.accuracy }}%</span></div>
+      <div class="text-xl margin-top-xs">{{ numResultsData.time_spent }}</div>
       <el-progress
         :show-text="false"
-        :percentage="70"
+        :percentage="parseFloat(numResultsData.accuracy)"
         :stroke-width="10"
         status="warning"
       />
@@ -31,7 +31,9 @@
 
       <random-box
         ref="randomBox"
-        random-number="31814410535809040085"
+        :answer-result="numResultsData.res"
+        :answer-rules="answerRules"
+        :random-number="numResultsData.upload_number"
       />
     </div>
 
@@ -42,19 +44,20 @@
 
       <random-box
         ref="randomBox"
-        random-number="31814410535809040085"
+        :random-number="numResultsData.random_number"
       />
     </div>
 
     <div class="flex justify-around margin-top-xl">
+      <!-- <el-button
+        round
+        class="word-btn"
+      >结束训练</el-button> -->
       <el-button
         round
         class="word-btn"
-      >结束训练</el-button>
-      <el-button
-        round
-        class="word-btn"
-      >再次联系</el-button>
+        @click="toNumTrain"
+      >再次练习</el-button>
     </div>
   </div>
 </template>
@@ -65,22 +68,32 @@ export default {
   name: 'Results',
   components: { randomBox },
   mixins: [],
-  props: {},
+  props: {
+    numResultsData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       answerRules: [
         {
           color: '#00FF49',
+          state: 'correct',
           title: '正确'
         },
         {
           color: '#D8001B',
+          state: 'error',
           title: '错误'
-        },
-        {
-          color: '#fff',
-          title: '未做'
         }
+        // {
+        //   color: '#fff',
+        // state:'',
+        //   title: '未做'
+        // }
       ]
     }
   },
@@ -89,7 +102,11 @@ export default {
 
   mounted() { },
 
-  methods: {}
+  methods: {
+    toNumTrain() {
+      this.$router.replace({ path: '/redirect' + this.$route.path })
+    }
+  }
 }
 
 </script>

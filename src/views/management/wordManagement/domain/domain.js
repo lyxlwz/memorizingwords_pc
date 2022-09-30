@@ -1,7 +1,7 @@
 const domain = [
   {
     label: 'ID',
-    prop: 'word_id',
+    prop: 'id',
     template: [{
       type: 'input'
     }]

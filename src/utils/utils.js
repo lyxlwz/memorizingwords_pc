@@ -124,6 +124,34 @@ export function currentDate() {
   return str
 }
 
+// 时间处理
+export function handleTime(time, isHour = true) {
+  // 定义变量  小时  分钟 秒 毫秒
+  let hour
+  let min
+  let second
+  let msecond
+
+  // 分别  获取到小时 分钟 秒 毫秒
+  hour = Math.floor(time / (3600 * 1000))
+  min = Math.floor(time / 1000 / 60 % 60)
+  second = Math.floor(time / 1000 % 60)
+  msecond = time % 1000
+
+  // 对时间进行处理
+  hour = hour < 10 ? '0' + hour : hour
+  min = min < 10 ? '0' + min : min
+  second = second < 10 ? '0' + second : second
+  msecond = msecond < 100 ? '0' + msecond : msecond
+  msecond = msecond < 10 ? '0' + msecond : msecond
+
+  if (isHour) {
+    return hour + ':' + min + ':' + second + ':' + msecond
+  } else {
+    return min + ':' + second + ':' + msecond
+  }
+}
+
 export function isOjbect(param) {
   return Object.prototype.toString.call(param) === '[object Object]'
 }

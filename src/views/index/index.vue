@@ -202,7 +202,7 @@ export default {
     getSerchList() {
       this.serachLoading = true
       this.$get({
-        url: this.$urlPath.getWordData,
+        url: this.$urlPath.getWord,
         data: {
           word: this.searchVal,
           ...this.queryData
@@ -225,16 +225,11 @@ export default {
       this.getSerchList()
     },
     jumpLearnWords(params) {
-      console.log(params, '===item')
       this.$router.push({
-        name: 'todayLearnWords',
-        ...params
-        // params: {
-        //   id: this.questionsId,
-        //   name: this.name,
-        //   isPushStats,
-        //   isPause,
-        // },
+        name: 'serachWord',
+        params: {
+          id: params.id
+        }
       })
     }
   }

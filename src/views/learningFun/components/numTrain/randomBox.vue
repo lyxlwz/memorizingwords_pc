@@ -7,7 +7,7 @@
     >
       <div
         class="word-info-bgcolor border-radius text-center num-training-num"
-        :style="{'margin':remember ? '0':'10%'}"
+        :style="{'padding':remember ? '0':'10%','border':`1px solid${colorList[numIndex]}`}"
       >
         <el-input
           v-if="remember"
@@ -32,15 +32,37 @@ export default {
     remember: {
       type: Boolean,
       default: false
+    },
+    answerRules: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    answerResult: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      numList: []
+      numList: [],
+      colorList: []
     }
   },
-
-  computed: {},
+  watch: {
+    answerResult(val) {
+      val.split(',').forEach(answer => {
+        if (answer === this.answerRules[0].state) {
+          console.log('5555', this.answerRules[0].color)
+          this.colorList.push(this.answerRules[0].color)
+        } else if (answer === this.answerRules[1].state) {
+          console.log('666666', this.answerRules[0].color)
+          this.colorList.push(this.answerRules[1].color)
+        }
+      })
+    }
+  },
 
   mounted() { },
 
@@ -55,7 +77,18 @@ export default {
     // margin: 1%;
   }
   &-num {
-    padding: 10%;
+    margin: 10%;
+  }
+  ::v-deep .el-input__inner {
+    background-color: #506cff !important;
+    color: #fff !important;
+    border: none !important;
+    // height: 70px !important;
+    // line-height: 70px !important;
+    // font-size: 28px !important;
+    padding: 0 !important;
+    font-weight: bold !important;
+    text-align: center !important;
   }
 }
 </style>

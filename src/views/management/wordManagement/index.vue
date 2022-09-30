@@ -8,7 +8,6 @@
             <el-input
               v-model="searchConditions"
               placeholder="搜索"
-              suffix-icon="el-icon-search"
               style="width:100%"
             >
               <el-select
@@ -16,6 +15,7 @@
                 v-model="selConditions"
                 placeholder="请选择"
                 style="width:120px"
+                @keyup.enter.native="enterClick"
               >
                 <el-option
                   v-for="(option,index) in serchOptions"
@@ -24,6 +24,11 @@
                   :value="option.prop"
                 />
               </el-select>
+              <i
+                slot="suffix"
+                class="el-icon-search"
+                @click="getData"
+              ></i>
             </el-input>
           </div>
         </div>
@@ -63,12 +68,15 @@
           </div>
 
           <div>
-            <el-button style="background-color: #3D5CFF;color:#fff;border-radius:10px">确定</el-button>
+            <el-button
+              style="background-color: #3D5CFF;color:#fff;border-radius:10px"
+              @click="updateWord"
+            >确定</el-button>
           </div>
         </div>
 
         <div class="word-text-color text-df text-bold">
-          <span v-show="checkVal.includes('结果全选')">暂不显示</span>
+          <!-- <span v-show="checkVal.includes('结果全选')">暂不显示</span> -->
           <span v-show="!checkVal.includes('结果全选')">已选择{{ selData.length }}</span>
         </div>
       </div>
@@ -139,11 +147,11 @@ export default {
   data() {
     return {
       searchConditions: '',
-      selConditions: 'word_id',
+      selConditions: 'id',
       serchOptions: domain,
       modValue: '',
       modOptions: domain,
-      modSelOption: 'word_id',
+      modSelOption: 'id',
 
       tableColumn: domain,
       tableConfig: {
@@ -157,12 +165,17 @@ export default {
           return this.tableRowClassName({ row, rowIndex })
         }
       },
+      queryData: {
+        count: 20,
+        page: 1
+      },
 
       selData: [],
       checkVal: [],
       checkList: ['结果全选', '当页全选'],
       winExport: false,
-      uploadFileAction: ''
+      //  uploadFileAction: this.$urlPath.wordImport,
+      uploadFileAction: 'http://154.213.21.110/index.php/index/WordSystem/wordImport'
     }
   },
 
@@ -176,33 +189,24 @@ export default {
   methods: {
     getData() {
       this.tableLoading = true
-      const data = {
-        word: 'word1',
-        paraphrase: '单词',
-        connect_in_the_mind: '内容内容内容',
-        group_id: '备注',
-        first_study_date: '2021-09-03'
-      }
-      setTimeout(() => {
-        this.tableData = Array(20).fill({}).map((item, index) => {
-          return {
-            _isEdit: false,
-            rowIndex: index,
-            word_id: ++index,
-            checked: false,
-            ...data
-          }
-        })
-        console.log(this.tableData, '7777this.tableData')
+      this.$get({
+        url: this.$urlPath.getWord,
+        data: {
+          wordList: 'all',
+          [this.selConditions]: this.searchConditions,
+          ...this.queryData
+        }
+      }).then((res) => {
+        this.tableData = res.data
         this.tableLoading = false
 
         this.handleSuccess(
           {
-            data: this.tableData,
-            totalSize: 20
+            data: res.data,
+            totalSize: res.per_page
           }
         )
-      }, 300)
+      })
     },
     checkBoxChange(val) {
       if (val.length > 1) {
@@ -251,10 +255,36 @@ export default {
       })
     },
     deleteOne(data) {
+      console.log(data, 5555555555)
       this.$showConfirmDialog('确定删除本条数据？').then(() => {
-        this.tableData.splice(data.rowIndex, 1)
-        this.$successMsg('删除成功！')
+        this.$get({
+          url: this.$urlPath.wordDelete,
+          data: {
+            wordid: data.id
+          }
+        }).then((res) => {
+          this.getData()
+          this.$successMsg('删除成功！')
+        })
       }).catch(() => { })
+    },
+    enterClick() {
+      this.queryData = {
+        count: 20,
+        page: 1
+      }
+      this.getData()
+    },
+    updateWord() {
+      this.$get({
+        url: this.$urlPath.updateWord,
+        data: {
+          // wordid: data.id
+        }
+      }).then((res) => {
+        this.getData()
+        this.$successMsg('更新成功！')
+      })
     },
     rowClick({ row, column, event }) {
       this.$set(row, 'checked', !row.checked)

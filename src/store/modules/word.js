@@ -5,7 +5,12 @@ const state = {
 }
 
 const getters = {
-
+  getWordList(state) {
+    return state.wordList
+  },
+  getWordId(state) {
+    return state.wordId
+  }
 }
 
 const actions = {
@@ -15,17 +20,13 @@ const actions = {
 const mutations = {
   // 储存单词list
   setWordList(state, data) {
-    if (data) {
-      state.wordList = data
-      window.sessionStorage.setItem('wordList', JSON.stringify(state.wordList))
-    }
+    state.wordList = data
+    window.sessionStorage.setItem('wordList', JSON.stringify(state.wordList))
   },
   // 储存单词id
   setWordId(state, data) {
-    if (data) {
-      state.wordId = data
-      window.sessionStorage.setItem('wordId', JSON.stringify(state.wordId))
-    }
+    state.wordId = data
+    window.sessionStorage.setItem('wordId', JSON.stringify(state.wordId))
   },
   // 清空单词list
   emptyWordList(state) {
