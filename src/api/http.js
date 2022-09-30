@@ -6,6 +6,8 @@ Vue.prototype.$http = function ({ url, data, method = 'GET', headers, beforeRequ
   const successHandler = res => {
     if (res.code === 200) {
       return res.data
+    } else if (res.code === 0) {
+      Vue.prototype.$layoutStore.onLogout()
     }
     Notification.error({
       message: res.msg || '请求失败，未知异常',

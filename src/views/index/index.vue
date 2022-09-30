@@ -19,7 +19,7 @@
       <MaskContent :show-mask.sync="showInpitMask">
         <transition>
           <div
-            v-show="isSerach"
+            v-show="isSearch"
             class="word-input-mask"
           >
             <div class="word-input-mask-title text-bold">查询结果</div>
@@ -28,14 +28,28 @@
               wrap-class="scrollbar-wrap-class"
             >
               <div
-                v-for="(item,index) in searchList"
-                :key="index"
-                v-loading="serachLoading"
-                class="word-input-mask-list-item solids-bottom margin-tb-sm"
-                @click="jumpLearnWords(item)"
+                v-infinite-scroll="loadData"
+                infinite-scroll-delay="1000"
+                :infinite-scroll-disabled="disabled"
               >
-                <div class="word-name">{{ item.word }}</div>
-                <div class="word-mean padding-tb-xs">{{ item.paraphrase }}</div>
+                <div
+                  v-for="(item,index) in searchList"
+                  :key="index"
+                  class="word-input-mask-item solids-bottom margin-tb-sm"
+                  @click="jumpLearnWords(item)"
+                >
+                  <div class="word-name">{{ item.word }}</div>
+                  <div class="word-mean padding-tb-xs">{{ item.paraphrase }}</div>
+                </div>
+
+                <p
+                  v-if="serachLoading"
+                  class="flex text-red"
+                >加载中...</p>
+                <p
+                  v-if="serachNoMore"
+                  class="flex text-red"
+                >没有更多了</p>
               </div>
             </el-scrollbar>
           </div>
@@ -109,7 +123,12 @@ export default {
       proverbs: {},
       searchList: [],
       isSearch: false,
-      serachLoading: false
+      queryData: {
+        count: 20,
+        page: 1
+      },
+      serachLoading: false,
+      last_page: 1
     }
   },
   computed: {
@@ -118,6 +137,12 @@ export default {
     }),
     collapse() {
       return this.$layoutStore.state.isCollapse
+    },
+    serachNoMore() {
+      return this.queryData.page >= this.last_page
+    },
+    disabled() {
+      return this.serachLoading || this.serachNoMore
     }
   },
   watch: {
@@ -168,6 +193,10 @@ export default {
       })
     },
     enterClick() {
+      this.queryData = {
+        count: 20,
+        page: 1
+      }
       this.getSerchList()
     },
     getSerchList() {
@@ -175,19 +204,25 @@ export default {
       this.$get({
         url: this.$urlPath.getWordData,
         data: {
-          word: this.searchVal
+          word: this.searchVal,
+          ...this.queryData
         }
       }).then((res) => {
-        if (res.length === 0) {
+        if (res.data.length === 0 && res.current_page === 1) {
           this.$errorMsg('暂无该单词，请重新输入')
         } else {
-          this.searchList = res
+          this.last_page = res.last_page
+          this.searchList.push(...res.data)
           this.isSearch = true
         }
         this.serachLoading = false
       }).catch((_) => {
         this.serachLoading = false
       })
+    },
+    loadData() {
+      this.queryData.page += 1
+      this.getSerchList()
     },
     jumpLearnWords(params) {
       console.log(params, '===item')

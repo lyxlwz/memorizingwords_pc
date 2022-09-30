@@ -37,7 +37,7 @@
         <MaskContent :show-mask.sync="showInpitMask">
           <transition>
             <div
-              v-show="isSerach"
+              v-show="isSearch"
               class="word-input-mask"
               style="width:22%"
             >
@@ -47,14 +47,28 @@
                 wrap-class="scrollbar-wrap-class"
               >
                 <div
-                  v-for="(item,index) in searchList"
-                  :key="index"
-                  v-loading="serachLoading"
-                  class="word-input-mask-item solids-bottom margin-tb-sm"
-                  @click="jumpLearnWords(item)"
+                  v-infinite-scroll="loadData"
+                  infinite-scroll-delay="1000"
+                  :infinite-scroll-disabled="disabled"
                 >
-                  <div class="word-name">{{ item.word }}</div>
-                  <div class="word-mean padding-tb-xs">{{ item.paraphrase }}</div>
+                  <div
+                    v-for="(item,index) in searchList"
+                    :key="index"
+                    class="word-input-mask-item solids-bottom margin-tb-sm"
+                    @click="jumpLearnWords(item)"
+                  >
+                    <div class="word-name">{{ item.word }}</div>
+                    <div class="word-mean padding-tb-xs">{{ item.paraphrase }}</div>
+                  </div>
+
+                  <p
+                    v-if="serachLoading"
+                    class="flex text-red"
+                  >加载中...</p>
+                  <p
+                    v-if="serachNoMore"
+                    class="flex text-red"
+                  >没有更多了</p>
                 </div>
               </el-scrollbar>
             </div>
@@ -135,7 +149,15 @@ export default {
       isShowTodayWrods: false,
       isTraining: false,
       isSearch: false,
-      serachLoading: false
+      queryData: {
+        count: 20,
+        page: 1
+      },
+      serachLoading: false,
+      last_page: 1,
+
+      wordId: '',
+      wordList: []
     }
   },
   computed: {
@@ -144,6 +166,12 @@ export default {
     },
     numTraining() {
       return this.$route.name === 'numberMemoryTraining'
+    },
+    serachNoMore() {
+      return this.queryData.page >= this.last_page
+    },
+    disabled() {
+      return this.serachLoading || this.serachNoMore
     }
   },
   created() {
@@ -158,25 +186,43 @@ export default {
 
   methods: {
     getData() {
-      this.wordObj = {
-        wordName: 'resort',
-        wordNature: '英',
-        wordLink: 'https://tts.youdao.com/fanyivoice?word=word.mp3',
-        phoneticSymbol: '/ rɪˈzɔːrt /',
-        wordsMean: [
-          {
-            wordType: 'n.',
-            wordMean: '度假胜地 采用的方法'
-          },
-          {
-            wordType: 'vi.',
-            wordMean: '诉诸，采取'
-          }
-        ],
-        wordAssociate: '<p>热（<span style="color: rgb(225, 60, 57);">re</span>）瘦（<span style="color: rgb(225, 60, 57);">s</span>）的鸡蛋（<span style="color: rgb(225, 60, 57);">o</span>）热（<span style="color: rgb(225, 60, 57);">r</span>）的头（<span style="color: rgb(225, 60, 57);">t</span>）疼</p><p></p>',
-        wordExampleLink: 'https://tts.youdao.com/fanyivoice?word=example.mp3',
-        wordExample: '<p>This place is just so charming, the perfect <span style="background-color: transparent;">winter resort.</span></p><p>这个地方实在是太好啦，完美的冬季旅游胜地！</p>'
-      }
+      this.$get({
+        url: this.$urlPath.getTodayWord,
+        data: {
+          date: this.nowDate
+        }
+      }).then((res) => {
+        console.log(res, 55555555)
+        // if (res.data.length === 0 && res.current_page === 1) {
+        //   this.$errorMsg('暂无该单词，请重新输入')
+        // } else {
+        //   this.last_page = res.last_page
+        //   this.searchList.push(...res.data)
+        //   this.isSearch = true
+        // }
+        // this.serachLoading = false
+      }).catch((_) => {
+        this.serachLoading = false
+      })
+      // this.wordObj = {
+      //   wordName: 'resort',
+      //   wordNature: '英',
+      //   wordLink: 'https://tts.youdao.com/fanyivoice?word=word.mp3',
+      //   phoneticSymbol: '/ rɪˈzɔːrt /',
+      //   wordsMean: [
+      //     {
+      //       wordType: 'n.',
+      //       wordMean: '度假胜地 采用的方法'
+      //     },
+      //     {
+      //       wordType: 'vi.',
+      //       wordMean: '诉诸，采取'
+      //     }
+      //   ],
+      //   wordAssociate: '<p>热（<span style="color: rgb(225, 60, 57);">re</span>）瘦（<span style="color: rgb(225, 60, 57);">s</span>）的鸡蛋（<span style="color: rgb(225, 60, 57);">o</span>）热（<span style="color: rgb(225, 60, 57);">r</span>）的头（<span style="color: rgb(225, 60, 57);">t</span>）疼</p><p></p>',
+      //   wordExampleLink: 'https://tts.youdao.com/fanyivoice?word=example.mp3',
+      //   wordExample: '<p>This place is just so charming, the perfect <span style="background-color: transparent;">winter resort.</span></p><p>这个地方实在是太好啦，完美的冬季旅游胜地！</p>'
+      // }
     },
     initData() {
       this.nowDate = new Date().toLocaleDateString()
@@ -194,6 +240,10 @@ export default {
       }
     },
     enterClick() {
+      this.queryData = {
+        count: 20,
+        page: 1
+      }
       this.getSerchList()
     },
     getSerchList() {
@@ -201,19 +251,25 @@ export default {
       this.$get({
         url: this.$urlPath.getWordData,
         data: {
-          word: this.searchVal
+          word: this.searchVal,
+          ...this.queryData
         }
       }).then((res) => {
-        if (res.length === 0) {
+        if (res.data.length === 0 && res.current_page === 1) {
           this.$errorMsg('暂无该单词，请重新输入')
         } else {
-          this.searchList = res
+          this.last_page = res.last_page
+          this.searchList.push(...res.data)
           this.isSearch = true
         }
         this.serachLoading = false
       }).catch((_) => {
         this.serachLoading = false
       })
+    },
+    loadData() {
+      this.queryData.page += 1
+      this.getSerchList()
     },
     jumpLearnWords(params) {
       console.log(params, '===item')

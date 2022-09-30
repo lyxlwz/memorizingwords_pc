@@ -1,6 +1,9 @@
 <template>
   <div>
-    <span class="word-name text-bold">{{ wordObj.wordName }}</span>
+    <div>
+      <span class="word-name text-bold">{{ wordObj.wordName }}</span>
+      <el-input v-model="wordObj.wordName" />
+    </div>
     <div class="margin-top flex">
       <span class="border-radius padding-xs word-info-bgcolor text-xs flex">
         <span class="margin-right-xs">{{ wordObj.wordNature }}</span>
@@ -187,5 +190,15 @@ export default {
   background: #fff !important;
   border-top-left-radius: 10px !important;
   border-top-right-radius: 10px !important;
+}
+
+::v-deep .el-input__inner {
+  background-color: #506cff !important;
+  color: #fff !important;
+  border: none !important;
+  height: 80px !important;
+  line-height: 80px !important;
+  font-size: 48px !important;
+  font-weight: bold !important;
 }
 </style>
