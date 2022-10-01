@@ -216,7 +216,8 @@ export default {
       this.$get({
         url: this.$urlPath.getWord,
         data: {
-          [selConditions]: this.searchConditions
+          [selConditions]: this.searchConditions,
+          ...this.queryData
         }
       }).then((res) => {
         this.handleSuccess(

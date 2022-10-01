@@ -248,9 +248,9 @@ export default {
         data
       }).then((res) => {
         let successMsg = '单词不记得，临时表及筛查表更新成功'
-        if (data.type === 2) {
+        if (data.error_count === 1) {
           successMsg = '单词不记得，临时表及筛查表更新成功'
-        } else if (data.type === 3) {
+        } else if (data.error_count === 0) {
           successMsg = '单词记得，临时表及筛查表更新成功'
         }
         this.$successMsg(successMsg)

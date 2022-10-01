@@ -70,6 +70,9 @@ export default {
       this.time_spent = handleTime(time, false)
     }, 1000 / 60)
   },
+  beforeDestroy() {
+    clearTimeout(this.timer)
+  },
 
   methods: {
     submit() {
