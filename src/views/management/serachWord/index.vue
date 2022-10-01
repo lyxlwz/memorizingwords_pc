@@ -66,7 +66,6 @@ export default {
   created() {
     const that = this
     saveRouteParams(that)
-    console.log(this.$route, this.$store, this.$route.params, '----99999999999')
 
     this.getWord(this.$route.params.id)
   },

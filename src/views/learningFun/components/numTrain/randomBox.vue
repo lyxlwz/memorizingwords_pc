@@ -54,10 +54,8 @@ export default {
     answerResult(val) {
       val.split(',').forEach(answer => {
         if (answer === this.answerRules[0].state) {
-          console.log('5555', this.answerRules[0].color)
           this.colorList.push(this.answerRules[0].color)
         } else if (answer === this.answerRules[1].state) {
-          console.log('666666', this.answerRules[0].color)
           this.colorList.push(this.answerRules[1].color)
         }
       })

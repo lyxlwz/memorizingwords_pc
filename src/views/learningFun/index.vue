@@ -117,6 +117,8 @@
                 ref="words"
                 :word-obj="wordObj"
                 :check-mean="checkMean"
+                :is-editor-word.sync="isEditorWord"
+                :is-editor-associate.sync="isEditorAssociate"
               />
 
               <div class="flex justify-around margin-top-xl">
@@ -170,7 +172,9 @@ export default {
       screenType: 1,
       inputVal: '20',
       numTrainObj: {},
-      fullscreenLoading: false
+      fullscreenLoading: false,
+      isEditorWord: false,
+      isEditorAssociate: false
     }
   },
   computed: {
@@ -361,17 +365,19 @@ export default {
       }
     },
     toNewWord(wordId) {
-      if (this.$refs.words.isEditorword || this.$refs.words.isEditorAssociate) {
+      if (this.isEditorWord || this.isEditorAssociate) {
         this.$get({
           url: this.$urlPath.updateWord,
           data: {
-            wordid: this.wordObj.id,
+            word_id: this.wordObj.id,
             word: this.wordObj.word,
             connect_in_the_mind: this.wordObj.connect_in_the_mind
           }
         }).then((res) => {
-          // todo
-          console.log(res, 55555555)
+          this.isEditorWord = false
+          this.isEditorAssociate = false
+          this.wordObj = res[0]
+          this.$successMsg('单词更新成功!')
         })
       } else {
         this.setWordId(wordId)
@@ -379,7 +385,6 @@ export default {
       }
     },
     jumpLearnWords(params) {
-      console.log(params, '===item')
       this.$router.push({
         name: 'serachWord',
         params: {
@@ -394,7 +399,6 @@ export default {
           digital_number: '20'
         }
       }).then((res) => {
-        console.log('666666666', res)
         this.numTrainObj = res
       })
     }

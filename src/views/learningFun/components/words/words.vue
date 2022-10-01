@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div @dblclick="isEditorword = true">
+    <div @dblclick="$emit('update:isEditorWord', true)">
       <span
-        v-if="!isEditorword"
+        v-if="!isEditorWord"
         class="word-name text-bold"
       >{{ wordObj.word }}</span>
       <el-input
@@ -54,7 +54,7 @@
         />
         <div
           class="text-right margin-top"
-          @dblclick="isEditorAssociate = true"
+          @dblclick="$emit('update:isEditorAssociate', true)"
         >
           <span class="text-center border-radius word-area-btn text-sm">联想</span>
         </div>
@@ -97,15 +97,25 @@ export default {
       default: () => {
         return false
       }
+    },
+    isEditorWord: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    },
+    isEditorAssociate: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
     }
   },
   data() {
     return {
       wordIsPlay: false,
       exampleIsPlay: false,
-      wordIds: ['wordLink'],
-      isEditorAssociate: false,
-      isEditorword: false
+      wordIds: ['wordLink']
     }
   },
 
@@ -117,12 +127,10 @@ export default {
     beforWordPlay() {
       this.stopAllAudio()
       this.wordIsPlay = false
-      console.log('beforWordPlay', this)
     },
     beforeExamplePlay() {
       this.stopAllAudio()
       this.exampleIsPlay = false
-      console.log('beforeExamplePlay')
     },
     stopAllAudio() {
       this.wordIds.forEach(wordId => {

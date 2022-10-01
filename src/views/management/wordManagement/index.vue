@@ -242,7 +242,6 @@ export default {
       }
     },
     modClick(data) {
-      console.log(data, '开始编辑')
       data.isShow = true
       if (data._columns.text === '编辑') {
         this.modFun(data)
@@ -274,7 +273,7 @@ export default {
 
       if (!data.row._isEdit) {
         this.updateWord({
-          wordid: data.row.id,
+          word_id: data.row.id,
           ...data.row
         })
       }
@@ -284,7 +283,7 @@ export default {
         this.$get({
           url: this.$urlPath.wordDelete,
           data: {
-            wordid: res.row.id
+            word_id: res.row.id
           }
         }).then((res) => {
           this.getData()
@@ -304,18 +303,10 @@ export default {
         this.$errorMsg('请选择需要修改的数据！')
         return
       }
-      let modSelObj = {}
-      console.log(this.modSelOptions, 6666666)
-      if (this.modSelOptions === 'id') {
-        modSelObj = {
-          'word_id': this.selDataIds.join(',')
-        }
-      } else {
-        modSelObj = {
-          [this.modSelOptions]: this.modValue
-        }
-      }
-      this.updateWord(modSelObj)
+      this.updateWord({
+        'word_id': this.selDataIds.join(','),
+        [this.modSelOptions]: this.modValue
+      })
     },
     updateWord(data) {
       this.$get({
