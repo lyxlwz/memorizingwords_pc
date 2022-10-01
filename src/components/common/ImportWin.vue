@@ -156,9 +156,7 @@ export default {
   methods: {
     initPostData() {
       this.posData = {
-        // sessionId: StorageUtils.getSessionItem('sessionId'),
-        bid: this.bid,
-        showTip: true, ...this.params
+        ...this.params
       }
     },
     beforeUpload() {
@@ -185,16 +183,6 @@ export default {
     // 处理附件上传成功事件  查重
     handleSuccess(res) {
       if (res.code && res.code === '200') {
-        /*   data: {syncType: "同步", busId: "test", busCode: "test", doingSeq: 1, doingNodeName: "上传文件", result: "失败",…}
-           busCode: "test"
-           busId: "test"
-           doingNodeName: "上传文件"
-           doingSeq: 1
-           errFilePath: "/pub/document/download/c43ed148fb6943809b86bd5c931f4333"
-           result: "失败"
-           syncType: "同步"
-           message: ""*/
-        // todo t同步异步处理
         if (res.data && res.data.syncType === '同步') {
           if (this.isSystem) {
             this.$emit('success', res)

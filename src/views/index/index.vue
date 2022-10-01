@@ -210,6 +210,7 @@ export default {
       }).then((res) => {
         if (res.data.length === 0 && res.current_page === 1) {
           this.$errorMsg('暂无该单词，请重新输入')
+          return
         } else {
           this.last_page = res.last_page
           this.searchList.push(...res.data)

@@ -27,7 +27,7 @@
               <i
                 slot="suffix"
                 class="el-icon-search"
-                @click="getData"
+                @click="serachData"
               ></i>
             </el-input>
           </div>
@@ -47,7 +47,7 @@
             <span class="word-text-color text-df text-bold margin-right-sm">批量修改</span>
             <div>
               <el-select
-                v-model="modSelOption"
+                v-model="modSelOptions"
                 placeholder="请选择"
               >
                 <el-option
@@ -70,14 +70,14 @@
           <div>
             <el-button
               style="background-color: #3D5CFF;color:#fff;border-radius:10px"
-              @click="updateWord"
+              @click="confirmUpDate"
             >确定</el-button>
           </div>
         </div>
 
         <div class="word-text-color text-df text-bold">
-          <!-- <span v-show="checkVal.includes('结果全选')">暂不显示</span> -->
-          <span v-show="!checkVal.includes('结果全选')">已选择{{ selData.length }}</span>
+          <span v-show="checkVal.includes('结果全选')">暂不显示</span>
+          <span v-show="!checkVal.includes('结果全选')">已选择{{ selDataIds.length }}</span>
         </div>
       </div>
 
@@ -151,7 +151,7 @@ export default {
       serchOptions: domain,
       modValue: '',
       modOptions: domain,
-      modSelOption: 'id',
+      modSelOptions: 'id',
 
       tableColumn: domain,
       tableConfig: {
@@ -170,9 +170,10 @@ export default {
         page: 1
       },
 
-      selData: [],
+      selDataIds: [],
       checkVal: [],
-      checkList: ['结果全选', '当页全选'],
+      // checkList: ['结果全选', '当页全选'],
+      checkList: ['当页全选'],
       winExport: false,
       //  uploadFileAction: this.$urlPath.wordImport,
       uploadFileAction: 'http://154.213.21.110/index.php/index/WordSystem/wordImport'
@@ -193,13 +194,30 @@ export default {
         url: this.$urlPath.getWord,
         data: {
           wordList: 'all',
-          [this.selConditions]: this.searchConditions,
           ...this.queryData
         }
       }).then((res) => {
-        this.tableData = res.data
-        this.tableLoading = false
-
+        this.handleSuccess(
+          {
+            data: res.data,
+            totalSize: res.per_page
+          }
+        )
+      })
+    },
+    serachData() {
+      let selConditions = 'word_id'
+      if (this.selConditions === 'id') {
+        selConditions = 'word_id'
+      } else {
+        selConditions = this.selConditions
+      }
+      this.$get({
+        url: this.$urlPath.getWord,
+        data: {
+          [selConditions]: this.searchConditions
+        }
+      }).then((res) => {
         this.handleSuccess(
           {
             data: res.data,
@@ -216,11 +234,10 @@ export default {
           console.log('结果全选')
         }
         if (val.includes('当页全选')) {
-          console.log('当页全选')
-          this.selData = this.tableData
+          this.selDataIds = this.tableData.map(v => v.id)
         }
       } else {
-        this.selData = []
+        this.selDataIds = []
       }
     },
     modClick(data) {
@@ -253,14 +270,20 @@ export default {
         //   // this.$set(column.template[0], 'assemblyType', 'primary')
         // }
       })
+
+      if (!data.row._isEdit) {
+        this.updateWord({
+          wordid: data.row.id,
+          ...data.row
+        })
+      }
     },
-    deleteOne(data) {
-      console.log(data, 5555555555)
+    deleteOne(res) {
       this.$showConfirmDialog('确定删除本条数据？').then(() => {
         this.$get({
           url: this.$urlPath.wordDelete,
           data: {
-            wordid: data.id
+            wordid: res.row.id
           }
         }).then((res) => {
           this.getData()
@@ -273,14 +296,30 @@ export default {
         count: 20,
         page: 1
       }
-      this.getData()
+      this.serachData()
     },
-    updateWord() {
+    confirmUpDate() {
+      if (this.selDataIds.length === 0) {
+        this.$errorMsg('请选择需要修改的数据！')
+        return
+      }
+      let modSelObj = {}
+      console.log(this.modSelOptions, 6666666)
+      if (this.modSelOptions === 'id') {
+        modSelObj = {
+          'word_id': this.selDataIds.join(',')
+        }
+      } else {
+        modSelObj = {
+          [this.modSelOptions]: this.modValue
+        }
+      }
+      this.updateWord(modSelObj)
+    },
+    updateWord(data) {
       this.$get({
         url: this.$urlPath.updateWord,
-        data: {
-          // wordid: data.id
-        }
+        data
       }).then((res) => {
         this.getData()
         this.$successMsg('更新成功！')
@@ -288,15 +327,12 @@ export default {
     },
     rowClick({ row, column, event }) {
       this.$set(row, 'checked', !row.checked)
-      this.selData.forEach(data => {
-
-      })
       if (row.checked) {
-        this.selData.push(row)
+        this.selDataIds.push(row.id)
       } else {
-        this.selData.forEach((data, index) => {
-          if (data.rowIndex === row.rowIndex) {
-            this.selData.splice(index, 1)
+        this.selDataIds.forEach((data, index) => {
+          if (data === row.id) {
+            this.selDataIds.splice(index, 1)
           }
         })
       }
@@ -314,7 +350,8 @@ export default {
       this.winExport = true
     },
     success() {
-
+      this.winExport = false
+      this.getData()
     }
   }
 }
@@ -324,6 +361,13 @@ export default {
 .el-select .el-input {
   width: 130px;
 }
+::v-deep .el-input__suffix {
+  height: 100%;
+  width: 25px;
+  text-align: center;
+  line-height: 40px;
+}
+
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
 }

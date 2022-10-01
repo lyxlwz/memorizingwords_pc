@@ -234,7 +234,7 @@ export default {
         url: this.$urlPath.getWordScreening,
         data
       }).then((res) => {
-        console.log(res, 555)
+        console.log(res, data, 555)
         // this.setWordList(res.temp_word_list)
         // this.setWordId(res.temp_word_list[0])
         // this.getWord(this.wordId)
@@ -302,6 +302,7 @@ export default {
       }).then((res) => {
         if (res.data.length === 0 && res.current_page === 1) {
           this.$errorMsg('暂无该单词，请重新输入')
+          return
         } else {
           this.last_page = res.last_page
           this.searchList.push(...res.data)

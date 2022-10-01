@@ -28,14 +28,3 @@ export const getErrorWordScreening = '/WordLearn/errorProneWordScreening'
 
 export const getNumberTraining = '/MemoryTraining/numberMemoryTraining'
 
-export const getRoleList = '/getRoleList'
-
-export const getMenuList = '/getMenuList'
-
-export const getParentMenuList = '/getParentMenuList'
-
-export const getTableList = '/getTableList'
-
-export const getCardList = '/getCardList'
-
-export const getCommentList = '/getCommentList'

@@ -61,6 +61,14 @@ export default {
   },
   methods: {
     handleSuccess({ data = [], totalSize = 20 }) {
+      if (data.length > 0) {
+        data.forEach((item, index) => {
+          item._isEdit = false
+          item.rowIndex = index
+          item.checked = false
+        })
+      }
+      this.tableLoading = false
       this.publishEvent('setTotalSize', totalSize)
       this.tableData = data
     }
