@@ -1,5 +1,10 @@
 <template>
-  <div class="word-blue-bgcolor restore-page h-100 padding-lg text-white text-df">
+  <div
+    v-loading.fullscreen.lock="fullscreenLoading"
+    element-loading-text="拼命加载中"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+    class="word-blue-bgcolor restore-page h-100 padding-lg text-white text-df"
+  >
     <el-row style="height:120px">
       <el-col
         v-if="isShowTodayWrods"
@@ -164,7 +169,8 @@ export default {
       lastLoad: false,
       screenType: 1,
       inputVal: '20',
-      numTrainObj: {}
+      numTrainObj: {},
+      fullscreenLoading: false
     }
   },
   computed: {
@@ -194,6 +200,7 @@ export default {
       setWordId: 'word/setWordId'
     }),
     getTodayLearnWords() {
+      this.fullscreenLoading = true
       this.$get({
         url: this.$urlPath.getTodayWord,
         data: {
@@ -206,6 +213,7 @@ export default {
       })
     },
     getRandomWordScreen() {
+      this.fullscreenLoading = true
       this.$get({
         url: this.$urlPath.getRandomWordScreening,
         data: {
@@ -218,6 +226,7 @@ export default {
       })
     },
     getFallibleWordScreen() {
+      this.fullscreenLoading = true
       this.$get({
         url: this.$urlPath.getErrorWordScreening,
         data: {
@@ -234,10 +243,13 @@ export default {
         url: this.$urlPath.getWordScreening,
         data
       }).then((res) => {
-        console.log(res, data, 555)
-        // this.setWordList(res.temp_word_list)
-        // this.setWordId(res.temp_word_list[0])
-        // this.getWord(this.wordId)
+        let successMsg = '单词不记得，临时表及筛查表更新成功'
+        if (data.type === 2) {
+          successMsg = '单词不记得，临时表及筛查表更新成功'
+        } else if (data.type === 3) {
+          successMsg = '单词记得，临时表及筛查表更新成功'
+        }
+        this.$successMsg(successMsg)
       })
     },
     getWord(word_id) {
@@ -249,6 +261,7 @@ export default {
       }).then((res) => {
         this.wordObj = res
         this.wordObj.word_voice = `${this.$urlPath.wordVoiceUrl}${res.word_voice}`
+        this.fullscreenLoading = false
       })
     },
     initData() {
