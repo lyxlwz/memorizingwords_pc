@@ -136,6 +136,7 @@
 import TableMixin, { PageModelMixin } from '@/mixins/TableMixin'
 
 import domain from './domain/domain'
+import modDomain from './domain/modDomain'
 export default {
   name: 'Index',
   components: {},
@@ -150,8 +151,8 @@ export default {
       selConditions: 'id',
       serchOptions: domain,
       modValue: '',
-      modOptions: domain,
-      modSelOptions: 'id',
+      modOptions: modDomain,
+      modSelOptions: 'word',
 
       tableColumn: domain,
       tableConfig: {
