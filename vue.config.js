@@ -6,7 +6,7 @@ function resolve(dir) {
 }
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/memorizingwords_pc' : '/',
-  outputDir: 'dist',
+  outputDir: 'memorizingwords_pc',
   assetsDir: 'static',
   lintOnSave: true,
   productionSourceMap: false,

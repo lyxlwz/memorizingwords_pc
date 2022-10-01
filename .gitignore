@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
-# /dist
+/memorizingwords_pc
+
+memorizingwords_pc.zip
 
 
 # local env files
