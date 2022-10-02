@@ -31,6 +31,7 @@
           style="z-index:1000;position: relative;width:80%"
           @focus="showInpitMask = true"
           @keyup.enter.native="enterClick"
+          @clear="clearAll"
         >
           <i
             slot="suffix"
@@ -392,6 +393,10 @@ export default {
           id: params.id
         }
       })
+    },
+    clearAll() {
+      this.searchVal = ''
+      this.indexList = []
     },
     toTrainNum() {
       this.$get({

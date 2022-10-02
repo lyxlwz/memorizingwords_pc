@@ -8,6 +8,7 @@
         clearable
         @focus="showInpitMask = true"
         @keyup.enter.native="enterClick"
+        @clear="clearAll"
       >
         <i
           slot="suffix"
@@ -226,6 +227,10 @@ export default {
     loadData() {
       this.queryData.page += 1
       this.getSerchList()
+    },
+    clearAll() {
+      this.searchVal = ''
+      this.indexList = []
     },
     jumpLearnWords(params) {
       this.$router.push({
