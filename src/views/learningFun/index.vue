@@ -26,6 +26,7 @@
       >
         <el-input
           v-model="searchVal"
+          clearable
           placeholder="搜索"
           style="z-index:1000;position: relative;width:80%"
           @focus="showInpitMask = true"

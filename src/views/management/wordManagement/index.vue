@@ -8,6 +8,7 @@
             <el-input
               v-model="searchConditions"
               placeholder="搜索"
+              clearable
               style="width:100%"
             >
               <el-select
@@ -63,7 +64,10 @@
           <div class="flex align-center margin-right-lg">
             <span class="word-text-color text-bold margin-right-sm">修改为</span>
             <div>
-              <el-input v-model="modValue" />
+              <el-input
+                v-model="modValue"
+                clearable
+              />
             </div>
           </div>
 

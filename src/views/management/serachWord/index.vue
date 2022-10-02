@@ -21,6 +21,7 @@
       >
         <el-input
           placeholder="搜索"
+          clearable
           style="z-index:1000;position: relative;width:80%"
         >
           <i

@@ -5,6 +5,7 @@
         v-model="searchVal"
         placeholder="搜索"
         style="width:40%;z-index:1000;position: relative"
+        clearable
         @focus="showInpitMask = true"
         @keyup.enter.native="enterClick"
       >
@@ -209,6 +210,7 @@ export default {
         }
       }).then((res) => {
         if (res.data.length === 0 && res.current_page === 1) {
+          this.searchList = []
           this.$errorMsg('暂无该单词，请重新输入')
           return
         } else {
